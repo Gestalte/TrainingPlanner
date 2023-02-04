@@ -5,8 +5,75 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrainingPlanner"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow"
+        Height="450" 
+        Width="800"
+        MinHeight="450"
+        MinWidth="800">
+    
+    <Grid Background="AntiqueWhite">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <Calendar/>
+        </StackPanel>
+
+        <!--Week view-->
+
+        <ListView Grid.Row="0" Grid.Column="1" Visibility="Hidden" Background="FloralWhite"/>
+
+        <!--Edit/New-->
+
+        <Grid Grid.Row="0" Grid.Column="1" Visibility="Visible" Background="FloralWhite">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                <TextBlock >Title</TextBlock>
+                <TextBox MinWidth="200"/>
+            </StackPanel >
+
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <Label FontWeight="Bold">Time of Day</Label>
+                <RadioButton GroupName="AMPM">AM</RadioButton>
+                <RadioButton GroupName="AMPM">PM</RadioButton>
+            </StackPanel>
+
+            <ComboBox Grid.Row="2" Grid.Column="1"/>
+
+            <Grid Grid.Row="3" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <TextBlock>Description</TextBlock>
+                    <TextBox MinWidth="200"/>
+                    <Button>Add</Button>
+                </StackPanel>
+                
+                <ListView  Grid.Row="1"/>
+            </Grid>
+            
+        </Grid>
+                
     </Grid>
 </Window>
