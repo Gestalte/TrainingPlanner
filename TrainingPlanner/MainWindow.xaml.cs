@@ -20,8 +20,13 @@ namespace TrainingPlanner
     /// </summary>
     public partial class MainWindow : Window
     {
+        readonly MainWindowViewModel ViewModel;
+
         public MainWindow()
         {
+            ViewModel = new MainWindowViewModel();
+            DataContext = ViewModel;
+
             InitializeComponent();
         }
     }
