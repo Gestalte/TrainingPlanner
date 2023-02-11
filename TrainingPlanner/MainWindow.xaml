@@ -9,71 +9,269 @@
         Height="450" 
         Width="800"
         MinHeight="450"
-        MinWidth="800">
-    
+        MinWidth="1000">
+
     <Grid Background="AntiqueWhite">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="50px"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="0">
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Button DockPanel.Dock="Right" FontWeight="Bold" Width="100px" Margin="10px" Background="ForestGreen" Foreground="LawnGreen" Visibility="Collapsed">Save</Button>
+            <Button DockPanel.Dock="Right" FontWeight="Bold" Width="100px" Margin="10px" Background="Blue" Foreground="CadetBlue" Visibility="Visible">Create</Button>
+            <TextBlock VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="10">Week view</TextBlock>
+        </DockPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="0">
             <Calendar/>
         </StackPanel>
 
         <!--Week view-->
 
-        <ListView Grid.Row="0" Grid.Column="1" Visibility="Hidden" Background="FloralWhite"/>
-
-        <!--Edit/New-->
-
-        <Grid Grid.Row="0" Grid.Column="1" Visibility="Visible" Background="FloralWhite">
+        <Grid Grid.Row="1" Grid.Column="1" Visibility="Hidden" Background="AliceBlue">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="30px"/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                <TextBlock >Title</TextBlock>
-                <TextBox MinWidth="200"/>
-            </StackPanel >
+            <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black"  Background="White"/>
+            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="AliceBlue"/>
+            <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="White"/>
+            <Border Grid.Row="0" Grid.Column="3" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="AliceBlue"/>
+            <Border Grid.Row="0" Grid.Column="4" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="White"/>
+            <Border Grid.Row="0" Grid.Column="5" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="AliceBlue"/>
+            <Border Grid.Row="0" Grid.Column="6" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="White"/>
 
-            <StackPanel Grid.Row="1" Grid.Column="1">
-                <Label FontWeight="Bold">Time of Day</Label>
-                <RadioButton GroupName="AMPM">AM</RadioButton>
-                <RadioButton GroupName="AMPM">PM</RadioButton>
+            <!--Monday-->
+            
+            <StackPanel Grid.Row="1" Grid.Column="0" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
             </StackPanel>
 
-            <ComboBox Grid.Row="2" Grid.Column="1"/>
+            <StackPanel Grid.Row="2" Grid.Column="0" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+            
+            <!--Tuesday-->
 
-            <Grid Grid.Row="3" Grid.Column="1">
+            <StackPanel Grid.Row="1" Grid.Column="1" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="1" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <!--Wednesday-->
+
+            <StackPanel Grid.Row="1" Grid.Column="2" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="2" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <!--Thursday-->
+
+            <StackPanel Grid.Row="1" Grid.Column="3" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="3" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <!--Friday-->
+
+            <StackPanel Grid.Row="1" Grid.Column="4" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="4" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <!--Saturday-->
+
+            <StackPanel Grid.Row="1" Grid.Column="5" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="5" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <!--Sunday-->
+
+            <StackPanel Grid.Row="1" Grid.Column="6" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="6" Background="Aquamarine" Visibility="Hidden">
+                <TextBlock FontWeight="SemiBold" Padding="5">Title</TextBlock>
+                <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
+                    <ListBoxItem>Description</ListBoxItem>
+                    <ListBoxItem>Description</ListBoxItem>
+                </ListBox>
+            </StackPanel>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Monday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Tuesday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="2" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Wednesday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="3" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Thursday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="4" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Friday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="5" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Saturday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="6" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Sunday</TextBlock>
+        </Grid>
+
+        <!--Edit/New-->
+
+        <ScrollViewer Grid.Row="1" Grid.Column="1" Visibility="Visible" Background="FloralWhite">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                
-                <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <TextBlock>Description</TextBlock>
-                    <TextBox MinWidth="200"/>
-                    <Button>Add</Button>
-                </StackPanel>
-                
-                <ListView  Grid.Row="1"/>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                    <TextBlock FontWeight="Bold" VerticalAlignment="Center">Title</TextBlock>
+                    <TextBox Margin="10,2.5,0,2.5" MinWidth="200"/>
+                </StackPanel >
+
+                <Border Margin="0,2.5,0,2.5" Padding="5" Grid.Row="1" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="White">
+                    <StackPanel >
+                        <Label FontWeight="Bold">Time of Day</Label>
+                        <RadioButton GroupName="AMPM">AM</RadioButton>
+                        <RadioButton GroupName="AMPM">PM</RadioButton>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,2.5,0,2.5" Padding="5" Grid.Row="2" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="White">
+                    <StackPanel>
+
+                        <Label FontWeight="Bold">Day of the week</Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <CheckBox Grid.Row="0" Grid.Column="0">Monday</CheckBox>
+                            <CheckBox Grid.Row="1" Grid.Column="0">Tuesday</CheckBox>
+                            <CheckBox Grid.Row="2" Grid.Column="0">Wednesday</CheckBox>
+                            <CheckBox Grid.Row="3" Grid.Column="0">Thursday</CheckBox>
+
+                            <CheckBox Grid.Row="0" Grid.Column="1" Margin="5,0,0,0">Friday</CheckBox>
+                            <CheckBox Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">Saturday</CheckBox>
+                            <CheckBox Grid.Row="2" Grid.Column="1" Margin="5,0,0,0">Sunday</CheckBox>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,2.5,0,2.5" Grid.Row="3" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="NavajoWhite">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="0">
+                            <TextBlock FontWeight="Bold" VerticalAlignment="Center">Description</TextBlock>
+                            <TextBox Margin="10,2.5,0,2.5" MinWidth="200"/>
+                            <Button Margin="10,2.5,0,2.5" Width="50px" VerticalAlignment="Center">Add</Button>
+                        </StackPanel>
+
+                        <ListView  Grid.Row="1" Margin="2.5,2.5,2.5,2.5"/>
+                    </Grid>
+                </Border>
+
             </Grid>
-            
-        </Grid>
-                
+        </ScrollViewer>
     </Grid>
 </Window>
