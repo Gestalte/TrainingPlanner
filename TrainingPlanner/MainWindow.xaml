@@ -9,7 +9,14 @@
         Height="450" 
         Width="800"
         MinHeight="450"
-        MinWidth="1000">
+        MinWidth="1000"
+        xmlns:me="clr-namespace:TrainingPlanner">
+
+    <Window.Resources>
+        <me:WeekViewVisibilityConverter x:Key="WeekViewVisibilityConverter" />
+        <me:AddEditViewVisibilityConverter x:Key="AddEditViewVisibilityConverter" />
+        <me:ButtonVisibilityConverter x:Key="ButtonVisibilityConverter" />
+    </Window.Resources>
 
     <Grid Background="AntiqueWhite">
         <Grid.ColumnDefinitions>
@@ -23,8 +30,43 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <Button DockPanel.Dock="Right" FontWeight="Bold" Width="100px" Margin="10px" Background="ForestGreen" Foreground="LawnGreen" Visibility="Collapsed">Save</Button>
-            <Button DockPanel.Dock="Right" FontWeight="Bold" Width="100px" Margin="10px" Background="Blue" Foreground="CadetBlue" Visibility="Visible">Create</Button>
+            
+            <Button 
+                DockPanel.Dock="Right" 
+                FontWeight="Bold" 
+                Width="100px" 
+                Margin="10px" 
+                Background="ForestGreen" 
+                Foreground="LawnGreen"
+                Visibility="{Binding ShowSaveButton,Converter={StaticResource ButtonVisibilityConverter}}"
+                Command="{Binding SaveCommand}">
+                Save
+            </Button>
+
+            <Button 
+                DockPanel.Dock="Right" 
+                FontWeight="Bold" 
+                Width="100px" 
+                Margin="10px" 
+                Background="Blue" 
+                Foreground="SkyBlue" 
+                Visibility="{Binding ShowCreateButton,Converter={StaticResource ButtonVisibilityConverter}}"
+                Command="{Binding CreateCommand}">
+                Create
+            </Button>
+
+            <Button 
+                DockPanel.Dock="Right" 
+                FontWeight="Bold" 
+                Width="100px" 
+                Margin="10px" 
+                Background="DarkOrange" 
+                Foreground="BlanchedAlmond" 
+                Visibility="{Binding ShowCancelButton,Converter={StaticResource ButtonVisibilityConverter}}"
+                Command="{Binding CancelCommand}">
+                Cancel
+            </Button>
+
             <TextBlock VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="10">Week view</TextBlock>
         </DockPanel>
 
@@ -34,7 +76,10 @@
 
         <!--Week view-->
 
-        <Grid Grid.Row="1" Grid.Column="1" Visibility="Visible" Background="AliceBlue">
+        <Grid Grid.Row="1" Grid.Column="1" 
+              Background="AliceBlue" 
+              Visibility="{Binding CurrentWindowView,Converter={StaticResource WeekViewVisibilityConverter}}">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -61,8 +106,8 @@
 
             <!--Monday-->
 
-            <DockPanel Grid.Row="1" Grid.Column="0" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+            <DockPanel Grid.Row="1" Grid.Column="0" Background="Aquamarine" Visibility="Visible">
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -71,7 +116,7 @@
             </DockPanel>
 
             <DockPanel Grid.Row="2" Grid.Column="0" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -82,7 +127,7 @@
             <!--Tuesday-->
 
             <DockPanel Grid.Row="1" Grid.Column="1" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -91,7 +136,7 @@
             </DockPanel>
 
             <DockPanel Grid.Row="2" Grid.Column="1" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -102,7 +147,7 @@
             <!--Wednesday-->
 
             <DockPanel Grid.Row="1" Grid.Column="2" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -111,7 +156,7 @@
             </DockPanel>
 
             <DockPanel Grid.Row="2" Grid.Column="2" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -122,7 +167,7 @@
             <!--Thursday-->
 
             <DockPanel Grid.Row="1" Grid.Column="3" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -131,7 +176,7 @@
             </DockPanel>
 
             <DockPanel Grid.Row="2" Grid.Column="3" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -142,7 +187,7 @@
             <!--Friday-->
 
             <DockPanel Grid.Row="1" Grid.Column="4" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -151,7 +196,7 @@
             </DockPanel>
 
             <DockPanel Grid.Row="2" Grid.Column="4" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -162,7 +207,7 @@
             <!--Saturday-->
 
             <DockPanel Grid.Row="1" Grid.Column="5" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -171,7 +216,7 @@
             </DockPanel>
 
             <DockPanel Grid.Row="2" Grid.Column="5" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -182,7 +227,7 @@
             <!--Sunday-->
 
             <DockPanel Grid.Row="1" Grid.Column="6" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -191,7 +236,7 @@
             </DockPanel>
 
             <DockPanel Grid.Row="2" Grid.Column="6" Background="Aquamarine" Visibility="Hidden">
-                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold">Edit</Button>
+                <Button DockPanel.Dock="Bottom" Background="DarkOrange" Foreground="WhiteSmoke" FontWeight="SemiBold" Command="{Binding EditCommand}">Edit</Button>
                 <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5">Title</TextBlock>
                 <ListBox Background="Aquamarine" Padding="5,0,5,0" BorderThickness="0px">
                     <ListBoxItem>Description</ListBoxItem>
@@ -210,7 +255,10 @@
 
         <!--Edit/New-->
 
-        <ScrollViewer Grid.Row="1" Grid.Column="1" Visibility="Hidden" Background="FloralWhite">
+        <ScrollViewer Grid.Row="1" Grid.Column="1" 
+            Background="FloralWhite"
+            Visibility="{Binding CurrentWindowView,Converter={StaticResource AddEditViewVisibilityConverter}}">
+            
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -275,17 +323,20 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <StackPanel Orientation="Horizontal" Grid.Row="0">
-                            <TextBlock FontWeight="Bold" VerticalAlignment="Center">Description</TextBlock>
-                            <TextBox Margin="10,2.5,0,2.5" MinWidth="200"/>
-                            <Button Margin="10,2.5,0,2.5" Width="50px" VerticalAlignment="Center">Add</Button>
-                        </StackPanel>
+                        <DockPanel Grid.Row="0">
+                            <TextBlock DockPanel.Dock="Left" Margin="5,0,0,0" FontWeight="Bold" VerticalAlignment="Center">Description</TextBlock>
+                            <Button DockPanel.Dock="Right" Margin="10,2.5,5,2.5" Width="50px" VerticalAlignment="Center">Add</Button>
+                            
+                            <TextBox DockPanel.Dock="Right" Margin="10,2.5,0,2.5"/>
+                        </DockPanel>
 
                         <ListView  Grid.Row="1" Margin="2.5,2.5,2.5,2.5"/>
                     </Grid>
                 </Border>
-
+                
             </Grid>
+            
         </ScrollViewer>
+        
     </Grid>
 </Window>
