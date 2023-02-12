@@ -23,7 +23,7 @@ namespace TrainingPlanner
                 {
                     "Item 1",
                     "Item 2"
-                },(WeekDay.Monday,TimeSlot.AM),true),
+                },(WeekDay.Monday,TimeSlot.AM)),
                 new WeekItem(),
                 new WeekItem(),
                 new WeekItem(),
@@ -36,7 +36,7 @@ namespace TrainingPlanner
                     "Item 1",
                     "Item 2",
                     "Item 3"
-                },(WeekDay.Monday,TimeSlot.AM),true),
+                },(WeekDay.Monday,TimeSlot.AM)),
             };
         }
 

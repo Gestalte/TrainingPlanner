@@ -4,13 +4,13 @@ namespace TrainingPlanner
 {
     public class WeekItem
     {
-        public WeekItem(string title, RelayCommand<object> editItemCommand,List<string> lineItems, (WeekDay weekDay, TimeSlot timeSlot) param,bool isVisible)
+        public WeekItem(string title, RelayCommand<object> editItemCommand,List<string> lineItems, (WeekDay weekDay, TimeSlot timeSlot) param)
         {
             Title = title;
             EditItemCommand = editItemCommand;
             LineItems = lineItems;
             Param = param;
-            IsVisible = isVisible;
+            IsVisible = true;
         }
 
         public WeekItem()
