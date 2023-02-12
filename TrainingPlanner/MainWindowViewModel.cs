@@ -1,8 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Transactions;
 using System.Windows.Input;
-using System.Windows.Markup;
 
 namespace TrainingPlanner
 {
@@ -11,12 +9,35 @@ namespace TrainingPlanner
         public MainWindowViewModel()
         {
             CreateCommand = new RelayCommand(OnCreate);
-            EditCommand = new RelayCommand(OnEdit);
+            EditCommand = new RelayCommand<object>(OnEdit);
             CancelCommand = new RelayCommand(OnCancel);
             SaveCommand = new RelayCommand(OnSave);
 
             EditMode = false;
             CurrentWindowView = WindowView.Weekview;
+            MainTitle = "Week view";
+
+            WeekItems = new List<WeekItem>
+            {
+                new WeekItem("Test",EditCommand, new List<string>
+                {
+                    "Item 1",
+                    "Item 2"
+                },(WeekDay.Monday,TimeSlot.AM),true),
+                new WeekItem(),
+                new WeekItem(),
+                new WeekItem(),
+                new WeekItem(),
+                new WeekItem(),
+                new WeekItem(),
+                new WeekItem(),
+                new WeekItem("Test2 ",EditCommand, new List<string>
+                {
+                    "Item 1",
+                    "Item 2",
+                    "Item 3"
+                },(WeekDay.Monday,TimeSlot.AM),true),
+            };
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -85,6 +106,30 @@ namespace TrainingPlanner
             }
         }
 
+        private List<WeekItem> weekItems = new();
+        public List<WeekItem> WeekItems
+        {
+            get => weekItems;
+            set
+            {
+                weekItems = value;
+                SetButtonVisibility();
+                this.NotifyPropertyChanged(nameof(WeekItems));
+            }
+        }
+
+        private string mainTitle = "";
+        public string MainTitle
+        {
+            get => mainTitle;
+            set
+            {
+                mainTitle = value;
+                SetButtonVisibility();
+                this.NotifyPropertyChanged(nameof(MainTitle));
+            }
+        }
+
         private void SetButtonVisibility()
         {
             if (CurrentWindowView == WindowView.Weekview)
@@ -107,14 +152,16 @@ namespace TrainingPlanner
 
         public void OnCreate()
         {
+            MainTitle = "Create item";
             CurrentWindowView = WindowView.AddEditview;
             EditMode = true;
         }
 
-        public ICommand EditCommand { get; set; }
+        public RelayCommand<object> EditCommand { get; set; }
 
-        public void OnEdit()
+        public void OnEdit(object data) // TODO: Change this to get Database id for editing.
         {
+            MainTitle = "Edit item";
             CurrentWindowView = WindowView.AddEditview;
             EditMode = true;
         }
@@ -123,6 +170,7 @@ namespace TrainingPlanner
 
         public void OnCancel()
         {
+            MainTitle = "Week view";
             CurrentWindowView = WindowView.Weekview;
             EditMode = false;
         }
@@ -131,6 +179,7 @@ namespace TrainingPlanner
 
         public void OnSave()
         {
+            MainTitle = "Week view";
             CurrentWindowView = WindowView.Weekview;
             EditMode = false;
         }
