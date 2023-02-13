@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace TrainingPlanner
@@ -17,27 +18,41 @@ namespace TrainingPlanner
             CurrentWindowView = WindowView.Weekview;
             MainTitle = "Week view";
 
-            WeekItems = new List<WeekItem>
+            var weekItemArr = new WeekItem[14];
+
+            for (int i = 0; i < weekItemArr.Length; i++)
             {
-                new WeekItem("Test",EditCommand, new List<string>
+                weekItemArr[i] = new WeekItem();
+            }
+
+            var n1 = new WeekItem("Test 1", EditCommand, new List<string>
                 {
                     "Item 1",
                     "Item 2"
-                },(WeekDay.Monday,TimeSlot.AM)),
-                new WeekItem(),
-                new WeekItem(),
-                new WeekItem(),
-                new WeekItem(),
-                new WeekItem(),
-                new WeekItem(),
-                new WeekItem(),
-                new WeekItem("Test2 ",EditCommand, new List<string>
+                });
+
+            var n2 = new WeekItem("Test 2", EditCommand, new List<string>
                 {
                     "Item 1",
                     "Item 2",
                     "Item 3"
-                },(WeekDay.Monday,TimeSlot.AM)),
-            };
+                });
+
+            AddItem(ref weekItemArr, n1, WeekDay.Monday, TimeSlot.AM);
+            AddItem(ref weekItemArr, n2, WeekDay.Friday, TimeSlot.PM);
+
+            WeekItems = weekItemArr.ToList();
+        }
+
+        public WeekItem[] AddItem(ref WeekItem[] weekItems, WeekItem newItem, WeekDay weekDay, TimeSlot timeSlot)
+        {
+            int index = (int)timeSlot == 1 ? (int)weekDay : (int)weekDay + 7;
+
+            newItem.Param = (weekDay, timeSlot);
+
+            weekItems[index] = newItem;
+
+            return weekItems;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
