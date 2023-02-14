@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -23,42 +24,10 @@ namespace TrainingPlanner
             CurrentWindowView = WindowView.Weekview;
             MainTitle = "Week view";
 
-            var weekItemArr = new WeekItem[14];
-
-            for (int i = 0; i < weekItemArr.Length; i++)
-            {
-                weekItemArr[i] = new WeekItem();
-            }
-
-            var n1 = new WeekItem("Test 1", EditCommand, new List<string>
-                {
-                    "Item 1",
-                    "Item 2"
-                });
-
-            var n2 = new WeekItem("Test 2", EditCommand, new List<string>
-                {
-                    "Item 1",
-                    "Item 2",
-                    "Item 3"
-                });
-
-            AddItem(ref weekItemArr, n1, WeekDay.Monday, TimeSlot.AM);
-            AddItem(ref weekItemArr, n2, WeekDay.Friday, TimeSlot.PM);
-
-            WeekItems = weekItemArr.ToList();
+            LoadSchedules();
         }
 
-        public WeekItem[] AddItem(ref WeekItem[] weekItems, WeekItem newItem, WeekDay weekDay, TimeSlot timeSlot)
-        {
-            int index = (int)timeSlot == 1 ? (int)weekDay : (int)weekDay + 7;
 
-            newItem.Param = (weekDay, timeSlot);
-
-            weekItems[index] = newItem;
-
-            return weekItems;
-        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -190,6 +159,8 @@ namespace TrainingPlanner
 
         public void OnCancel()
         {
+            LoadSchedules();
+
             MainTitle = "Week view";
             CurrentWindowView = WindowView.Weekview;
             EditMode = false;
@@ -199,9 +170,43 @@ namespace TrainingPlanner
 
         public void OnSave()
         {
+            LoadSchedules();
+
             MainTitle = "Week view";
             CurrentWindowView = WindowView.Weekview;
             EditMode = false;
+        }
+
+        public void LoadSchedules()
+        {
+            Func<Schedule, WeekItem> makeWeekItem = s
+                => new WeekItem(s.Title, EditCommand, s.Exercises.Select(s => s.Description).ToList());
+
+            var weekItemArr = new WeekItem[14];
+
+            for (int i = 0; i < weekItemArr.Length; i++)
+            {
+                weekItemArr[i] = new WeekItem();
+            }
+
+            this.scheduleRepository.GetAll()
+                .Take(14)
+                .DistinctBy(d => (d.Weekday, d.Timeslot))
+                .ToList()
+                .ForEach(f => AddItem(ref weekItemArr, makeWeekItem(f), (WeekDay)f.Weekday, (TimeSlot)f.Timeslot));
+
+            WeekItems = weekItemArr.ToList();
+        }
+
+        public WeekItem[] AddItem(ref WeekItem[] weekItems, WeekItem newItem, WeekDay weekDay, TimeSlot timeSlot)
+        {
+            int index = (int)timeSlot == 1 ? (int)weekDay : (int)weekDay + 7;
+
+            newItem.Param = (weekDay, timeSlot);
+
+            weekItems[index] = newItem;
+
+            return weekItems;
         }
     }
 }

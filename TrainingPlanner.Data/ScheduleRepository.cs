@@ -1,4 +1,6 @@
-﻿namespace TrainingPlanner.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace TrainingPlanner.Data
 {
     public class ScheduleRepository : IScheduleRepository
     {
@@ -11,7 +13,7 @@
 
         public IEnumerable<Schedule> GetAll()
         {
-            return context.Schedules;
+            return context.Schedules.Include(e=>e.Exercises);
         }
     }
 }
