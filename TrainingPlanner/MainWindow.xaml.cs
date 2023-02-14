@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using TrainingPlanner.Data;
 
 namespace TrainingPlanner
 {
@@ -9,9 +10,9 @@ namespace TrainingPlanner
     {
         readonly MainWindowViewModel ViewModel;
 
-        public MainWindow()
+        public MainWindow(IScheduleRepository scheduleRepository)
         {
-            ViewModel = new MainWindowViewModel();
+            ViewModel = new MainWindowViewModel(scheduleRepository);
             DataContext = ViewModel;
 
             InitializeComponent();

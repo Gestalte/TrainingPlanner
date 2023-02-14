@@ -2,13 +2,18 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using TrainingPlanner.Data;
 
 namespace TrainingPlanner
 {
     public partial class MainWindowViewModel : INotifyPropertyChanged
     {
-        public MainWindowViewModel()
+        private readonly IScheduleRepository scheduleRepository;
+
+        public MainWindowViewModel(IScheduleRepository scheduleRepository)
         {
+            this.scheduleRepository = scheduleRepository;
+
             CreateCommand = new RelayCommand(OnCreate);
             EditCommand = new RelayCommand<object>(OnEdit);
             CancelCommand = new RelayCommand(OnCancel);
