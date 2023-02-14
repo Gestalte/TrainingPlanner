@@ -190,6 +190,7 @@ namespace TrainingPlanner
             }
 
             this.scheduleRepository.GetAll()
+                .Where(w => w.IsComplete == false)
                 .Take(14)
                 .DistinctBy(d => (d.Weekday, d.Timeslot))
                 .ToList()
