@@ -171,6 +171,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" Grid.Column="1">
@@ -246,6 +247,8 @@
                         <ListView  Grid.Row="1" Margin="2.5,2.5,2.5,2.5"/>
                     </Grid>
                 </Border>
+
+                <Button Grid.Row="5" Margin="0,5" Grid.Column="1" Background="Blue" Foreground="Aquamarine" FontWeight="Bold" Visibility="{Binding EditMode,Converter={StaticResource VisibilityConverter}}">Complete</Button>
 
             </Grid>
 
