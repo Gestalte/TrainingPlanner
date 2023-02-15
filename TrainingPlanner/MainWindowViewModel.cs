@@ -27,8 +27,6 @@ namespace TrainingPlanner
             LoadSchedules();
         }
 
-
-
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public void NotifyPropertyChanged(string propName)
@@ -38,6 +36,34 @@ namespace TrainingPlanner
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
             }
         }
+
+        private string title;
+        public string Title
+        {
+            get => title;
+            set
+            {
+                title = value;
+                this.NotifyPropertyChanged(nameof(Title));
+            }
+        }
+
+        private int numberOfRepetitions;
+        public int NumberOfRepetitions
+        {
+            get => numberOfRepetitions;
+            set
+            {
+                numberOfRepetitions = value;
+                this.NotifyPropertyChanged(nameof(NumberOfRepetitions));
+            }
+        }
+
+        // AM/PM
+        // Day of the week
+        // description
+        // Add command
+        // list of descriptions
 
         private WindowView currentWindowView;
         public WindowView CurrentWindowView
@@ -143,7 +169,7 @@ namespace TrainingPlanner
         {
             MainTitle = "Create item";
             CurrentWindowView = WindowView.AddEditview;
-            EditMode = true;
+            EditMode = false;
         }
 
         public RelayCommand<object> EditCommand { get; set; }
@@ -159,16 +185,19 @@ namespace TrainingPlanner
 
         public void OnCancel()
         {
-            LoadSchedules();
-
-            MainTitle = "Week view";
-            CurrentWindowView = WindowView.Weekview;
-            EditMode = false;
+            ResetWeekView();
         }
 
         public ICommand SaveCommand { get; set; }
 
         public void OnSave()
+        {
+
+
+            ResetWeekView();
+        }
+
+        public void ResetWeekView()
         {
             LoadSchedules();
 

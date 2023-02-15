@@ -22,7 +22,7 @@ namespace TrainingPlanner
                 }
                 else
                 {
-                    return Visibility.Hidden;
+                    return Visibility.Collapsed;
                 }
             }
             else

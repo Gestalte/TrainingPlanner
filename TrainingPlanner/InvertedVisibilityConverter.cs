@@ -5,18 +5,13 @@ using System.Windows.Data;
 
 namespace TrainingPlanner
 {
-    public class ButtonVisibilityConverter : IValueConverter
+    public class InvertedVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is true)
-            {
-                return Visibility.Visible;
-            }
-            else
-            {
-                return Visibility.Collapsed;
-            }
+            return value is true
+                ? Visibility.Collapsed
+                : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

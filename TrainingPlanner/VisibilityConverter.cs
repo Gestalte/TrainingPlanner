@@ -11,7 +11,7 @@ namespace TrainingPlanner
         {
             return value is true 
                 ? Visibility.Visible 
-                : Visibility.Hidden;
+                : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -15,7 +15,7 @@
     <Window.Resources>
         <me:WeekViewVisibilityConverter x:Key="WeekViewVisibilityConverter" />
         <me:AddEditViewVisibilityConverter x:Key="AddEditViewVisibilityConverter" />
-        <me:ButtonVisibilityConverter x:Key="ButtonVisibilityConverter" />
+        <me:InvertedVisibilityConverter x:Key="InvertedVisibilityConverter" />
         <me:VisibilityConverter x:Key="VisibilityConverter" />
     </Window.Resources>
 
@@ -39,7 +39,7 @@
                 Margin="10px" 
                 Background="ForestGreen" 
                 Foreground="LawnGreen"
-                Visibility="{Binding ShowSaveButton,Converter={StaticResource ButtonVisibilityConverter}}"
+                Visibility="{Binding ShowSaveButton,Converter={StaticResource VisibilityConverter}}"
                 Command="{Binding SaveCommand}">
                 Save
             </Button>
@@ -51,7 +51,7 @@
                 Margin="10px" 
                 Background="Blue" 
                 Foreground="SkyBlue" 
-                Visibility="{Binding ShowCreateButton,Converter={StaticResource ButtonVisibilityConverter}}"
+                Visibility="{Binding ShowCreateButton,Converter={StaticResource VisibilityConverter}}"
                 Command="{Binding CreateCommand}">
                 Create
             </Button>
@@ -63,7 +63,7 @@
                 Margin="10px" 
                 Background="DarkOrange" 
                 Foreground="BlanchedAlmond" 
-                Visibility="{Binding ShowCancelButton,Converter={StaticResource ButtonVisibilityConverter}}"
+                Visibility="{Binding ShowCancelButton,Converter={StaticResource VisibilityConverter}}"
                 Command="{Binding CancelCommand}">
                 Cancel
             </Button>
@@ -74,91 +74,6 @@
         <StackPanel Grid.Row="1" Grid.Column="0">
             <Calendar/>
         </StackPanel>
-
-        <!--Edit/New-->
-
-        <ScrollViewer Grid.Row="1" Grid.Column="1" 
-            Background="FloralWhite"
-            Visibility="{Binding CurrentWindowView,Converter={StaticResource AddEditViewVisibilityConverter}}">
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                    <TextBlock FontWeight="Bold" VerticalAlignment="Center">Title</TextBlock>
-                    <TextBox Margin="10,2.5,0,2.5" MinWidth="200"/>
-                </StackPanel >
-
-                <Border Margin="0,2.5,0,2.5" Padding="5" Grid.Row="1" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="White">
-                    <StackPanel >
-                        <Label FontWeight="Bold">Time of Day</Label>
-                        <RadioButton GroupName="AMPM">AM</RadioButton>
-                        <RadioButton GroupName="AMPM">PM</RadioButton>
-                    </StackPanel>
-                </Border>
-
-                <Border Margin="0,2.5,0,2.5" Padding="5" Grid.Row="2" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="White">
-                    <StackPanel>
-
-                        <Label FontWeight="Bold">Day of the week</Label>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-
-                            <CheckBox Grid.Row="0" Grid.Column="0">Monday</CheckBox>
-                            <CheckBox Grid.Row="1" Grid.Column="0">Tuesday</CheckBox>
-                            <CheckBox Grid.Row="2" Grid.Column="0">Wednesday</CheckBox>
-                            <CheckBox Grid.Row="3" Grid.Column="0">Thursday</CheckBox>
-
-                            <CheckBox Grid.Row="0" Grid.Column="1" Margin="5,0,0,0">Friday</CheckBox>
-                            <CheckBox Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">Saturday</CheckBox>
-                            <CheckBox Grid.Row="2" Grid.Column="1" Margin="5,0,0,0">Sunday</CheckBox>
-                        </Grid>
-
-                    </StackPanel>
-                </Border>
-
-                <Border Margin="0,2.5,0,2.5" Grid.Row="3" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="NavajoWhite">
-                    <Grid >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <DockPanel Grid.Row="0">
-                            <TextBlock DockPanel.Dock="Left" Margin="5,0,0,0" FontWeight="Bold" VerticalAlignment="Center">Description</TextBlock>
-                            <Button DockPanel.Dock="Right" Margin="10,2.5,5,2.5" Width="50px" VerticalAlignment="Center">Add</Button>
-
-                            <TextBox DockPanel.Dock="Right" Margin="10,2.5,0,2.5"/>
-                        </DockPanel>
-
-                        <ListView  Grid.Row="1" Margin="2.5,2.5,2.5,2.5"/>
-                    </Grid>
-                </Border>
-
-            </Grid>
-
-        </ScrollViewer>
 
         <!--Week view-->
 
@@ -237,5 +152,104 @@
 
             </ListView>
         </Grid>
+
+        <!--Edit/New-->
+
+        <ScrollViewer Grid.Row="1" Grid.Column="1" 
+            Background="FloralWhite"
+            Visibility="{Binding CurrentWindowView,Converter={StaticResource AddEditViewVisibilityConverter}}">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center">Title</TextBlock>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="10,2.5,0,2.5" MinWidth="200" Text="{Binding Title}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center" Visibility="{Binding EditMode,Converter={StaticResource InvertedVisibilityConverter}}">Number of Repetitions</TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="10,2.5,0,2.5" MinWidth="200" Visibility="{Binding EditMode,Converter={StaticResource InvertedVisibilityConverter}}" Text="{Binding NumberOfRepetitions}"/>
+                </Grid>
+                
+                <Border Margin="0,2.5,0,2.5" Padding="5" Grid.Row="1" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="White">
+                    <StackPanel >
+                        <Label FontWeight="Bold">Time of Day</Label>
+                        <RadioButton GroupName="AMPM">AM</RadioButton>
+                        <RadioButton GroupName="AMPM">PM</RadioButton>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,2.5,0,2.5" Padding="5" Grid.Row="2" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="White">
+                    <StackPanel>
+
+                        <Label FontWeight="Bold">Day of the week</Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <CheckBox Grid.Row="0" Grid.Column="0">Monday</CheckBox>
+                            <CheckBox Grid.Row="1" Grid.Column="0">Tuesday</CheckBox>
+                            <CheckBox Grid.Row="2" Grid.Column="0">Wednesday</CheckBox>
+                            <CheckBox Grid.Row="3" Grid.Column="0">Thursday</CheckBox>
+
+                            <CheckBox Grid.Row="0" Grid.Column="1" Margin="5,0,0,0">Friday</CheckBox>
+                            <CheckBox Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">Saturday</CheckBox>
+                            <CheckBox Grid.Row="2" Grid.Column="1" Margin="5,0,0,0">Sunday</CheckBox>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,2.5,0,2.5" Grid.Row="3" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="NavajoWhite">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <DockPanel Grid.Row="0">
+                            <TextBlock DockPanel.Dock="Left" Margin="5,0,0,0" FontWeight="Bold" VerticalAlignment="Center">Description</TextBlock>
+                            <Button DockPanel.Dock="Right" Margin="10,2.5,5,2.5" Width="50px" VerticalAlignment="Center">Add</Button>
+
+                            <TextBox DockPanel.Dock="Right" Margin="10,2.5,0,2.5"/>
+                        </DockPanel>
+
+                        <ListView  Grid.Row="1" Margin="2.5,2.5,2.5,2.5"/>
+                    </Grid>
+                </Border>
+
+            </Grid>
+
+        </ScrollViewer>
+
     </Grid>
 </Window>
