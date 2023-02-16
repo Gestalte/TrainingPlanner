@@ -15,6 +15,10 @@ namespace TrainingPlanner
 
         public MainWindowViewModel(IScheduleRepository scheduleRepository)
         {
+            title = "";
+            exerciseDescription = "";
+            exerciseItems = new ObservableCollection<ExerciseItem>();
+
             this.scheduleRepository = scheduleRepository;
 
             ExerciseItems = new ObservableCollection<ExerciseItem>();
@@ -80,32 +84,23 @@ namespace TrainingPlanner
         [ObservableProperty]
         bool editMode;
 
+        [ObservableProperty]
         private List<WeekItem> weekItems = new();
-        public List<WeekItem> WeekItems
-        {
-            get => weekItems;
-            set
-            {
-                weekItems = value;
-                SetButtonVisibility();
 
-                base.OnPropertyChanged(nameof(weekItems));
-            }
+        partial void OnWeekItemsChanged(List<WeekItem> value)
+        {
+            SetButtonVisibility();
         }
 
         [ObservableProperty]
         ObservableCollection<ExerciseItem> exerciseItems;
 
+        [ObservableProperty]
         private string mainTitle = "";
-        public string MainTitle
+
+        partial void OnMainTitleChanged(string value)
         {
-            get => mainTitle;
-            set
-            {
-                mainTitle = value;
-                SetButtonVisibility();
-                base.OnPropertyChanged(nameof(MainTitle));
-            }
+            SetButtonVisibility();
         }
 
         private void SetButtonVisibility()
@@ -146,7 +141,7 @@ namespace TrainingPlanner
             if (selectedSchedule == null) return;
 
             Title = selectedSchedule?.Title ?? "";
-            AmpmSelection = (TimeSlot)selectedSchedule.Timeslot;
+            AmpmSelection = (TimeSlot)selectedSchedule!.Timeslot;
 
             WeekDaySelection = (WeekDay)selectedSchedule.Weekday;
 
