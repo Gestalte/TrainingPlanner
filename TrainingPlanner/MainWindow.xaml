@@ -72,6 +72,18 @@
                 Cancel
             </Button>
 
+            <Button 
+                DockPanel.Dock="Right" 
+                FontWeight="Bold" 
+                Width="100px" 
+                Margin="10px" 
+                Background="DarkRed" 
+                Foreground="red" 
+                Visibility="{Binding EditMode,Converter={StaticResource VisibilityConverter}}"
+                Command="{Binding DeleteCommand}">
+                Delete
+            </Button>
+
             <TextBlock VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Margin="10" TextAlignment="Center" Text="{Binding MainTitle}"/>
         </DockPanel>
 

@@ -64,5 +64,22 @@ namespace TrainingPlanner.Data
 
             context.SaveChanges();
         }
+
+        public void Delete(Schedule selectedSchedule)
+        {
+            var schedule = context.Schedules
+                .Include(e => e.Exercises)
+                .Where(w => w.ScheduleId == selectedSchedule.ScheduleId)
+                .FirstOrDefault();
+
+
+            foreach (var item in schedule.Exercises)
+            {
+                context.Exercises.Remove(item);
+            }
+
+            context.Schedules.Remove(schedule);
+            context.SaveChanges();
+        }
     }
 }

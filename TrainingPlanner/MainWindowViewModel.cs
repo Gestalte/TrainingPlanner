@@ -176,6 +176,16 @@ namespace TrainingPlanner
             ResetWeekView();
         }
 
+        [RelayCommand]
+        public void Delete()
+        {
+            this.scheduleRepository.Delete(SelectedSchedule);
+
+            SelectedSchedule = null!;
+
+            ResetWeekView();
+        }
+
         private void EditSchedule()
         {
             SelectedSchedule.Title = Title;
