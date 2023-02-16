@@ -18,6 +18,8 @@
         <me:InvertedVisibilityConverter x:Key="InvertedVisibilityConverter" />
         <me:VisibilityConverter x:Key="VisibilityConverter" />
         <me:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+        <me:CompleteBackgroundConverter x:Key="CompleteBackgroundConverter" />
+        <me:CompleteContentConverter x:Key="CompleteContentConverter" />
     </Window.Resources>
 
     <Grid Background="AntiqueWhite">
@@ -355,13 +357,12 @@
                 </Border>
 
                 <Button Grid.Row="5" Grid.Column="1" 
-                        Margin="0,5"  
-                        Background="Blue" Foreground="Aquamarine" 
+                        Margin="0,5"   Foreground="White" 
                         FontWeight="Bold" 
-                        Visibility="{Binding EditMode, Converter={StaticResource VisibilityConverter}}">
-                    Complete
-                </Button>
-
+                        Visibility="{Binding EditMode, Converter={StaticResource VisibilityConverter}}"
+                        Background="{Binding ItemCompleted,Converter={StaticResource CompleteBackgroundConverter}}"
+                        Content="{Binding ItemCompleted,Converter={StaticResource CompleteContentConverter}}"
+                        Command="{Binding MarkCompleteCommand}"/>
             </Grid>
 
         </ScrollViewer>

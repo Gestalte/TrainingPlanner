@@ -15,4 +15,8 @@
     <ProjectReference Include="..\TrainingPlanner.Data\TrainingPlanner.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ValueConverters\" />
+  </ItemGroup>
+
 </Project>

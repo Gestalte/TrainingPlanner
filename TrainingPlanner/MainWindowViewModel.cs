@@ -9,7 +9,7 @@ using TrainingPlanner.Data;
 
 namespace TrainingPlanner
 {
-    public partial class MainWindowViewModel:ObservableObject,INotifyPropertyChanged
+    public partial class MainWindowViewModel : ObservableObject, INotifyPropertyChanged
     {
         private readonly IScheduleRepository scheduleRepository;
 
@@ -27,6 +27,7 @@ namespace TrainingPlanner
             CurrentWindowView = WindowView.Weekview;
             MainTitle = "Week view";
             AmpmSelection = TimeSlot.AM;
+            selectedSchedule = null!;
 
             ResetWeekdayCheckboxes();
 
@@ -85,7 +86,13 @@ namespace TrainingPlanner
         bool editMode;
 
         [ObservableProperty]
+        Schedule selectedSchedule;
+
+        [ObservableProperty]
         private List<WeekItem> weekItems = new();
+
+        [ObservableProperty]
+        private bool itemCompleted;
 
         partial void OnWeekItemsChanged(List<WeekItem> value)
         {
@@ -140,6 +147,8 @@ namespace TrainingPlanner
 
             if (selectedSchedule == null) return;
 
+            SelectedSchedule = selectedSchedule;
+
             Title = selectedSchedule?.Title ?? "";
             AmpmSelection = (TimeSlot)selectedSchedule!.Timeslot;
 
@@ -148,6 +157,8 @@ namespace TrainingPlanner
             var exercises = selectedSchedule.Exercises.Select(s => new ExerciseItem(s.Description, RemoveExcerciseItemCommand));
 
             exercises.ToList().ForEach(f => ExerciseItems.Add(f));
+
+            ItemCompleted = selectedSchedule.IsComplete;
         }
 
         [RelayCommand]
@@ -173,9 +184,21 @@ namespace TrainingPlanner
 
         private void EditSchedule()
         {
-            // TODO: swap out check boxes for radio group when editing.
+            SelectedSchedule.Title = Title;
+            SelectedSchedule.Timeslot = (short)AmpmSelection;
+            SelectedSchedule.Weekday = (short)WeekDaySelection;
 
-            throw new NotImplementedException();
+            SelectedSchedule.Exercises = ExerciseItems.Select(s => new Exercise
+            {
+                Description = s.Description,
+                ExerciseId = s.ExerciseId
+            }).ToList();
+
+            SelectedSchedule.IsComplete = ItemCompleted;
+
+            this.scheduleRepository.Edit(SelectedSchedule);
+
+            SelectedSchedule = null!;
         }
 
         public void CreateSchedules()
@@ -233,6 +256,12 @@ namespace TrainingPlanner
         public void RemoveExcerciseItem(object data)
         {
             ExerciseItems.Remove((ExerciseItem)data);
+        }
+
+        [RelayCommand]
+        public void MarkComplete()
+        {
+            ItemCompleted = !ItemCompleted;
         }
 
         public void ResetWeekdayCheckboxes()
