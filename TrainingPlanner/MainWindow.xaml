@@ -24,59 +24,7 @@
 
         <!--<SolidColorBrush x:Key="myBrush" Color="Red" />-->
         
-        <Style x:Key="buttonStyle" TargetType="Button">
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Width" Value="100px"/>
-            <Setter Property="Margin" Value="10px"/>
-        </Style>
-
-        <Style x:Key="saveButtonStyle" BasedOn="{StaticResource buttonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="ForestGreen"/>
-            <Setter Property="Foreground" Value="LawnGreen"/>
-        </Style>
-
-        <Style x:Key="createButtonStyle" BasedOn="{StaticResource buttonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="Blue"/>
-            <Setter Property="Foreground" Value="SkyBlue"/>
-        </Style>
-
-        <Style x:Key="cancelButtonStyle" BasedOn="{StaticResource buttonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="DarkOrange"/>
-            <Setter Property="Foreground" Value="BlanchedAlmond"/>
-        </Style>
-
-        <Style x:Key="deleteButtonStyle" BasedOn="{StaticResource buttonStyle}" TargetType="Button">
-            <Setter Property="Background" Value="DarkRed"/>
-            <Setter Property="Foreground" Value="Red"/>
-        </Style>
-
-        <Style x:Key="borderBoxStyle"  TargetType="Border">
-            <Setter Property="Margin" Value="0,2.5,0,2.5"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="BorderThickness" Value="1px"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="Background" Value="White"/>
-        </Style>
-
-        <Style x:Key="weekHeaderStyle"  TargetType="TextBlock">
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
-
-        <Style x:Key="weekDayColumn"  TargetType="Border">
-            <Setter Property="Grid.RowSpan" Value="3"/>
-            <Setter Property="BorderThickness" Value="1px"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-        </Style>
-
-        <Style x:Key="weekDayColumnOdd" BasedOn="{StaticResource weekDayColumn}"  TargetType="Border">
-            <Setter Property="Background" Value="White"/>
-        </Style>
-
-        <Style x:Key="weekDayColumnEven" BasedOn="{StaticResource weekDayColumn}"  TargetType="Border">
-            <Setter Property="Background" Value="AliceBlue"/>
-        </Style>
+        
 
     </Window.Resources>
 
