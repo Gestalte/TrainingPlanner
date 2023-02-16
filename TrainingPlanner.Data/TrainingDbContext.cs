@@ -10,6 +10,7 @@ namespace TrainingPlanner.Data
         }
 
         public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
     }
 
     public class Schedule
