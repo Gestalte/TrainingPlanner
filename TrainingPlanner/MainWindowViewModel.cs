@@ -12,30 +12,26 @@ namespace TrainingPlanner
     public partial class MainWindowViewModel : ObservableObject, INotifyPropertyChanged
     {
         private readonly IScheduleRepository scheduleRepository;
+        private readonly IScheduleBuilder scheduleBuilder;
 
-        public MainWindowViewModel(IScheduleRepository scheduleRepository)
+        public MainWindowViewModel(IScheduleRepository scheduleRepository, IScheduleBuilder scheduleBuilder)
         {
-            title = "";
-            exerciseDescription = "";
-            exerciseItems = new ObservableCollection<ExerciseItem>();
-
             this.scheduleRepository = scheduleRepository;
+            this.scheduleBuilder = scheduleBuilder;
+            this.scheduleBuilder.EditCommand = EditCommand;
 
             ExerciseItems = new ObservableCollection<ExerciseItem>();
-
             EditMode = false;
             CurrentWindowView = WindowView.Weekview;
             MainTitle = "Week view";
             AmpmSelection = TimeSlot.AM;
-            selectedSchedule = null!;
 
-            ResetWeekdayCheckboxes();
-
-            LoadSchedules();
+            SetWeekdayCheckboxesToFalse();
+            WeekItems = this.scheduleBuilder.LoadSchedules();
         }
 
         [ObservableProperty]
-        string title;
+        string title = "";
 
         [ObservableProperty]
         int numberOfRepetitions;
@@ -68,7 +64,7 @@ namespace TrainingPlanner
         bool sundayChecked;
 
         [ObservableProperty]
-        string exerciseDescription;
+        string exerciseDescription = "";
 
         [ObservableProperty]
         WindowView currentWindowView;
@@ -86,7 +82,7 @@ namespace TrainingPlanner
         bool editMode;
 
         [ObservableProperty]
-        Schedule selectedSchedule;
+        Schedule selectedSchedule = null!;
 
         [ObservableProperty]
         private List<WeekItem> weekItems = new();
@@ -100,7 +96,7 @@ namespace TrainingPlanner
         }
 
         [ObservableProperty]
-        ObservableCollection<ExerciseItem> exerciseItems;
+        ObservableCollection<ExerciseItem> exerciseItems = new ObservableCollection<ExerciseItem>();
 
         [ObservableProperty]
         private string mainTitle = "";
@@ -264,7 +260,7 @@ namespace TrainingPlanner
             ItemCompleted = !ItemCompleted;
         }
 
-        public void ResetWeekdayCheckboxes()
+        public void SetWeekdayCheckboxesToFalse()
         {
             MondayChecked = false;
             TuesdayChecked = false;
@@ -277,7 +273,7 @@ namespace TrainingPlanner
 
         public void ResetWeekView()
         {
-            LoadSchedules();
+            WeekItems = this.scheduleBuilder.LoadSchedules();
 
             ClearAddEditScreen();
 
@@ -291,15 +287,33 @@ namespace TrainingPlanner
             Title = "";
             NumberOfRepetitions = 0;
             AmpmSelection = TimeSlot.AM;
-            ResetWeekdayCheckboxes();
+            SetWeekdayCheckboxesToFalse();
             ExerciseDescription = "";
             ExerciseItems = new ObservableCollection<ExerciseItem>();
         }
 
-        public void LoadSchedules()
+
+    }
+
+    public class ScheduleBuilder : IScheduleBuilder
+    {
+        private readonly IScheduleRepository scheduleRepository;
+        public IRelayCommand<object> EditCommand { get; set; } = null!; // Use property injection to set this.
+
+        public ScheduleBuilder(IScheduleRepository scheduleRepository)
+        {
+            this.scheduleRepository = scheduleRepository;
+        }
+
+        public List<WeekItem> LoadSchedules()
         {
             Func<Schedule, WeekItem> makeWeekItem = s
                 => new WeekItem(s.Title, s.ScheduleId, EditCommand, s.Exercises.Select(s => s.Description).ToList());
+
+            if (EditCommand == null)
+            {
+                throw new ArgumentNullException(nameof(EditCommand));
+            }
 
             var weekItemArr = new WeekItem[14];
 
@@ -314,10 +328,10 @@ namespace TrainingPlanner
                 .ToList()
                 .ForEach(f => AddItem(ref weekItemArr, makeWeekItem(f), (WeekDay)f.Weekday, (TimeSlot)f.Timeslot));
 
-            WeekItems = weekItemArr.ToList();
+            return weekItemArr.ToList();
         }
 
-        public WeekItem[] AddItem(ref WeekItem[] weekItems, WeekItem newItem, WeekDay weekDay, TimeSlot timeSlot)
+        private WeekItem[] AddItem(ref WeekItem[] weekItems, WeekItem newItem, WeekDay weekDay, TimeSlot timeSlot)
         {
             int index = (int)timeSlot == 1 ? (int)weekDay : (int)weekDay + 7;
 

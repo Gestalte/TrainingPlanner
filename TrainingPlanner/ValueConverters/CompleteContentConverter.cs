@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace TrainingPlanner
+namespace TrainingPlanner.ValueConverters
 {
     public class CompleteContentConverter : IValueConverter
     {

@@ -1,24 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using static TrainingPlanner.MainWindowViewModel;
 
-namespace TrainingPlanner
+namespace TrainingPlanner.ValueConverters
 {
-    public class AddEditViewVisibilityConverter : IValueConverter
+    public class WeekViewVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is WindowView w)
             {
-                if (w == WindowView.AddEditview)
+                if (w == WindowView.Weekview)
                 {
                     return Visibility.Visible;
                 }
                 else
                 {
-                    return Visibility.Hidden;
+                    return Visibility.Collapsed;
                 }
             }
             else

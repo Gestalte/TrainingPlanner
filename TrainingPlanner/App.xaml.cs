@@ -27,8 +27,9 @@ namespace TrainingPlanner
             }
 
             IScheduleRepository scheduleRepository = new ScheduleRepository(dbContext);
+            IScheduleBuilder scheduleBuilder = new ScheduleBuilder(scheduleRepository);
 
-            MainWindow mainWindow = new MainWindow(scheduleRepository);
+            MainWindow mainWindow = new(scheduleRepository, scheduleBuilder);
             mainWindow.Show();
         }
     }

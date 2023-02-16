@@ -10,9 +10,9 @@ namespace TrainingPlanner
     {
         readonly MainWindowViewModel ViewModel;
 
-        public MainWindow(IScheduleRepository scheduleRepository)
+        public MainWindow(IScheduleRepository scheduleRepository, IScheduleBuilder scheduleBuilder)
         {
-            ViewModel = new MainWindowViewModel(scheduleRepository);
+            ViewModel = new MainWindowViewModel(scheduleRepository, scheduleBuilder);
             DataContext = ViewModel;
 
             InitializeComponent();
