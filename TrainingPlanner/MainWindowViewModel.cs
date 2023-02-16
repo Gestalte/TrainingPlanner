@@ -39,6 +39,9 @@ namespace TrainingPlanner
         TimeSlot ampmSelection;
 
         [ObservableProperty]
+        WeekDay weekDaySelection;
+
+        [ObservableProperty]
         bool mondayChecked;
 
         [ObservableProperty]
@@ -145,7 +148,7 @@ namespace TrainingPlanner
             Title = selectedSchedule?.Title ?? "";
             AmpmSelection = (TimeSlot)selectedSchedule.Timeslot;
 
-            // TODO: Set radio group
+            WeekDaySelection = (WeekDay)selectedSchedule.Weekday;
 
             var exercises = selectedSchedule.Exercises.Select(s => new ExerciseItem(s.Description, RemoveExcerciseItemCommand));
 
@@ -161,7 +164,7 @@ namespace TrainingPlanner
         [RelayCommand]
         public void Save()
         {
-            if (editMode)
+            if (EditMode)
             {
                 EditSchedule();
             }
@@ -184,7 +187,7 @@ namespace TrainingPlanner
         {
             List<Schedule> schedules = new List<Schedule>();
 
-            for (int i = 0; i < numberOfRepetitions; i++)
+            for (int i = 0; i < NumberOfRepetitions; i++)
             {
                 foreach (var (day, _) in GetCheckedDays())
                 {
@@ -199,8 +202,6 @@ namespace TrainingPlanner
                             Description = s.Description
                         }).ToList()
                     };
-
-                    //this.scheduleRepository.Add(schedule);
 
                     schedules.Add(schedule);
                 }

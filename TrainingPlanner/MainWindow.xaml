@@ -17,7 +17,7 @@
         <me:AddEditViewVisibilityConverter x:Key="AddEditViewVisibilityConverter" />
         <me:InvertedVisibilityConverter x:Key="InvertedVisibilityConverter" />
         <me:VisibilityConverter x:Key="VisibilityConverter" />
-        <me:AMPMEnumBooleanConverter x:Key="AMPMEnumBooleanConverter" />
+        <me:EnumBooleanConverter x:Key="EnumBooleanConverter" />
     </Window.Resources>
 
     <Grid Background="AntiqueWhite">
@@ -210,18 +210,61 @@
                         <Label FontWeight="Bold">Time of Day</Label>
                         <RadioButton 
                             GroupName="AMPM"
-                            IsChecked="{Binding AmpmSelection, Converter={StaticResource AMPMEnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.AM}}">
+                            IsChecked="{Binding AmpmSelection, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.AM}}">
                             AM
                         </RadioButton>
                         <RadioButton 
                             GroupName="AMPM" 
-                            IsChecked="{Binding AmpmSelection, Converter={StaticResource AMPMEnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.PM}}">
+                            IsChecked="{Binding AmpmSelection, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.PM}}">
                             PM
                         </RadioButton>
                     </StackPanel>
                 </Border>
 
-                <Border Margin="0,2.5,0,2.5" Padding="5" Grid.Row="2" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="White">
+                <Border Grid.Row="2" Grid.Column="1" 
+                        Margin="0,2.5,0,2.5" 
+                        Padding="5"  
+                        BorderThickness="1px" 
+                        BorderBrush="Black" 
+                        Background="White" 
+                        Visibility="{Binding EditMode, Converter={StaticResource VisibilityConverter}}">
+
+                    <StackPanel>
+
+                        <Label FontWeight="Bold">Day of the week</Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <RadioButton Grid.Row="0" Grid.Column="0" GroupName="WeekDays" IsChecked="{Binding WeekDaySelection, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static local:WeekDay.Monday}}">Monday</RadioButton>
+                            <RadioButton Grid.Row="1" Grid.Column="0" GroupName="WeekDays" IsChecked="{Binding WeekDaySelection, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static local:WeekDay.Tuesday}}">Tuesday</RadioButton>
+                            <RadioButton Grid.Row="2" Grid.Column="0" GroupName="WeekDays" IsChecked="{Binding WeekDaySelection, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static local:WeekDay.Wednesday}}">Wednesday</RadioButton>
+                            <RadioButton Grid.Row="3" Grid.Column="0" GroupName="WeekDays" IsChecked="{Binding WeekDaySelection, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static local:WeekDay.Thursday}}">Thursday</RadioButton>
+                            <RadioButton Grid.Row="0" Grid.Column="1" GroupName="WeekDays" IsChecked="{Binding WeekDaySelection, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static local:WeekDay.Friday}}"   Margin="5,0,0,0">Friday</RadioButton>
+                            <RadioButton Grid.Row="1" Grid.Column="1" GroupName="WeekDays" IsChecked="{Binding WeekDaySelection, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static local:WeekDay.Saturday}}" Margin="5,0,0,0">Saturday</RadioButton>
+                            <RadioButton Grid.Row="2" Grid.Column="1" GroupName="WeekDays" IsChecked="{Binding WeekDaySelection, Converter={StaticResource EnumBooleanConverter}, ConverterParameter={x:Static local:WeekDay.Sunday}}"   Margin="5,0,0,0">Sunday</RadioButton>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="1" 
+                        Margin="0,2.5,0,2.5" 
+                        Padding="5"  
+                        BorderThickness="1px" 
+                        BorderBrush="Black" 
+                        Background="White" 
+                        Visibility="{Binding EditMode, Converter={StaticResource InvertedVisibilityConverter}}">
+                    
                     <StackPanel>
 
                         <Label FontWeight="Bold">Day of the week</Label>
