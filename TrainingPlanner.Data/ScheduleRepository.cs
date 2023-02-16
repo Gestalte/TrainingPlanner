@@ -21,5 +21,15 @@ namespace TrainingPlanner.Data
             context.Schedules.Add(schedule);
             context.SaveChanges();
         }
+
+        public void AddMultiple(Schedule[] schedules)
+        {
+            foreach (Schedule schedule in schedules)
+            {
+                context.Schedules.Add(schedule);
+            }
+
+            context.SaveChanges();
+        }
     }
 }

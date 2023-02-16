@@ -325,6 +325,8 @@ namespace TrainingPlanner
 
         public void CreateSchedules()
         {
+            List<Schedule> schedules = new List<Schedule>();
+
             for (int i = 0; i < numberOfRepetitions; i++)
             {
                 foreach (var (day, _) in GetCheckedDays())
@@ -341,9 +343,13 @@ namespace TrainingPlanner
                         }).ToList()
                     };
 
-                    this.scheduleRepository.Add(schedule);
+                    //this.scheduleRepository.Add(schedule);
+
+                    schedules.Add(schedule);
                 }
             }
+
+            this.scheduleRepository.AddMultiple(schedules.ToArray());
         }
 
         private (WeekDay day, bool check)[] GetCheckedDays()
