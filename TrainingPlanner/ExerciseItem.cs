@@ -4,10 +4,19 @@ namespace TrainingPlanner
 {
     public class ExerciseItem
     {
-        public ExerciseItem(string description, IRelayCommand<object> removeCommand)
+        public ExerciseItem(string description,  IRelayCommand<object> removeCommand)
         {
             Description = description;
             RemoveCommand = removeCommand;
+
+            Myself = this;
+        }
+
+        public ExerciseItem(string description,int exerciseId, IRelayCommand<object> removeCommand)
+        {
+            Description = description;
+            RemoveCommand = removeCommand;
+            ExerciseId = exerciseId;
 
             Myself = this;
         }

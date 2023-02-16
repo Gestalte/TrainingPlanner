@@ -150,7 +150,7 @@ namespace TrainingPlanner
             ItemCompleted = selectedSchedule.IsComplete;
 
             selectedSchedule.Exercises
-                .Select(s => new ExerciseItem(s.Description, RemoveExcerciseItemCommand))
+                .Select(s => new ExerciseItem(s.Description, s.ExerciseId, RemoveExcerciseItemCommand))
                 .ToList()
                 .ForEach(f => ExerciseItems.Add(f));
         }

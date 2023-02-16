@@ -13,13 +13,14 @@ namespace TrainingPlanner.Data
 
         public IEnumerable<Schedule> GetAll()
         {
-            return context.Schedules.Include(e => e.Exercises);
+            return context.Schedules.Include(e => e.Exercises).AsNoTracking();
         }
 
         public Schedule? GetById(int Id)
         {
             return context.Schedules
                 .Include(e => e.Exercises)
+                .AsNoTracking()
                 .Where(w => w.ScheduleId == Id)
                 .FirstOrDefault();
         }
@@ -52,8 +53,14 @@ namespace TrainingPlanner.Data
             schedule.Title = selectedSchedule.Title;
             schedule.Timeslot = selectedSchedule.Timeslot;
             schedule.Weekday = selectedSchedule.Weekday;
-            schedule.Exercises = selectedSchedule.Exercises;
             schedule.IsComplete = selectedSchedule.IsComplete;
+
+            foreach (var item in schedule.Exercises)
+            {
+                context.Exercises.Remove(item);
+            }
+
+            schedule.Exercises = selectedSchedule.Exercises;
 
             context.SaveChanges();
         }
