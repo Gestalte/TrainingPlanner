@@ -21,6 +21,63 @@
         <vc:EnumBooleanConverter x:Key="EnumBooleanConverter" />
         <vc:CompleteBackgroundConverter x:Key="CompleteBackgroundConverter" />
         <vc:CompleteContentConverter x:Key="CompleteContentConverter" />
+
+        <!--<SolidColorBrush x:Key="myBrush" Color="Red" />-->
+        
+        <Style x:Key="buttonStyle" TargetType="Button">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="100px"/>
+            <Setter Property="Margin" Value="10px"/>
+        </Style>
+
+        <Style x:Key="saveButtonStyle" BasedOn="{StaticResource buttonStyle}" TargetType="Button">
+            <Setter Property="Background" Value="ForestGreen"/>
+            <Setter Property="Foreground" Value="LawnGreen"/>
+        </Style>
+
+        <Style x:Key="createButtonStyle" BasedOn="{StaticResource buttonStyle}" TargetType="Button">
+            <Setter Property="Background" Value="Blue"/>
+            <Setter Property="Foreground" Value="SkyBlue"/>
+        </Style>
+
+        <Style x:Key="cancelButtonStyle" BasedOn="{StaticResource buttonStyle}" TargetType="Button">
+            <Setter Property="Background" Value="DarkOrange"/>
+            <Setter Property="Foreground" Value="BlanchedAlmond"/>
+        </Style>
+
+        <Style x:Key="deleteButtonStyle" BasedOn="{StaticResource buttonStyle}" TargetType="Button">
+            <Setter Property="Background" Value="DarkRed"/>
+            <Setter Property="Foreground" Value="Red"/>
+        </Style>
+
+        <Style x:Key="borderBoxStyle"  TargetType="Border">
+            <Setter Property="Margin" Value="0,2.5,0,2.5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderThickness" Value="1px"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style x:Key="weekHeaderStyle"  TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="weekDayColumn"  TargetType="Border">
+            <Setter Property="Grid.RowSpan" Value="3"/>
+            <Setter Property="BorderThickness" Value="1px"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
+
+        <Style x:Key="weekDayColumnOdd" BasedOn="{StaticResource weekDayColumn}"  TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style x:Key="weekDayColumnEven" BasedOn="{StaticResource weekDayColumn}"  TargetType="Border">
+            <Setter Property="Background" Value="AliceBlue"/>
+        </Style>
+
     </Window.Resources>
 
     <Grid Background="AntiqueWhite">
@@ -38,11 +95,7 @@
 
             <Button 
                 DockPanel.Dock="Right" 
-                FontWeight="Bold" 
-                Width="100px" 
-                Margin="10px" 
-                Background="ForestGreen" 
-                Foreground="LawnGreen"
+                Style="{StaticResource saveButtonStyle}"
                 Visibility="{Binding ShowSaveButton,Converter={StaticResource VisibilityConverter}}"
                 Command="{Binding SaveCommand}">
                 Save
@@ -50,11 +103,7 @@
 
             <Button 
                 DockPanel.Dock="Right" 
-                FontWeight="Bold" 
-                Width="100px" 
-                Margin="10px" 
-                Background="Blue" 
-                Foreground="SkyBlue" 
+                Style="{StaticResource createButtonStyle}"
                 Visibility="{Binding ShowCreateButton,Converter={StaticResource VisibilityConverter}}"
                 Command="{Binding CreateCommand}">
                 Create
@@ -62,11 +111,7 @@
 
             <Button 
                 DockPanel.Dock="Right" 
-                FontWeight="Bold" 
-                Width="100px" 
-                Margin="10px" 
-                Background="DarkOrange" 
-                Foreground="BlanchedAlmond" 
+                Style="{StaticResource cancelButtonStyle}"
                 Visibility="{Binding ShowCancelButton,Converter={StaticResource VisibilityConverter}}"
                 Command="{Binding CancelCommand}">
                 Cancel
@@ -74,11 +119,7 @@
 
             <Button 
                 DockPanel.Dock="Right" 
-                FontWeight="Bold" 
-                Width="100px" 
-                Margin="10px" 
-                Background="DarkRed" 
-                Foreground="red" 
+                Style="{StaticResource deleteButtonStyle}"
                 Visibility="{Binding EditMode,Converter={StaticResource VisibilityConverter}}"
                 Command="{Binding DeleteCommand}">
                 Delete
@@ -113,21 +154,21 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black"  Background="White"/>
-            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="AliceBlue"/>
-            <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="White"/>
-            <Border Grid.Row="0" Grid.Column="3" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="AliceBlue"/>
-            <Border Grid.Row="0" Grid.Column="4" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="White"/>
-            <Border Grid.Row="0" Grid.Column="5" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="AliceBlue"/>
-            <Border Grid.Row="0" Grid.Column="6" Grid.RowSpan="3" BorderThickness="1px" BorderBrush="Black" Background="White"/>
+            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource weekDayColumnOdd}"/>
+            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource weekDayColumnEven}"/>
+            <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource weekDayColumnOdd}"/>
+            <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource weekDayColumnEven}"/>
+            <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource weekDayColumnOdd}"/>
+            <Border Grid.Row="0" Grid.Column="5" Style="{StaticResource weekDayColumnEven}"/>
+            <Border Grid.Row="0" Grid.Column="6" Style="{StaticResource weekDayColumnOdd}"/>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Monday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Tuesday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="2" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Wednesday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="3" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Thursday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="4" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Friday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="5" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Saturday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="6" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">Sunday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource weekHeaderStyle}">Monday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource weekHeaderStyle}">Tuesday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource weekHeaderStyle}">Wednesday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource weekHeaderStyle}">Thursday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource weekHeaderStyle}">Friday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="5" Style="{StaticResource weekHeaderStyle}">Saturday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="6" Style="{StaticResource weekHeaderStyle}">Sunday</TextBlock>
 
             <ListView Grid.Row="1" 
                       Grid.Column="0" 
@@ -215,12 +256,11 @@
 
                     <TextBox Grid.Row="1" Grid.Column="1" 
                              Margin="10,2.5,0,2.5" 
-                             MinWidth="200" 
                              Visibility="{Binding EditMode,Converter={StaticResource InvertedVisibilityConverter}}" 
                              Text="{Binding NumberOfRepetitions}"/>
                 </Grid>
 
-                <Border Margin="0,2.5,0,2.5" Padding="5" Grid.Row="1" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="White">
+                <Border Padding="5" Grid.Row="1" Grid.Column="1" Style="{StaticResource borderBoxStyle}">
                     <StackPanel >
                         <Label FontWeight="Bold">Time of Day</Label>
                         <RadioButton 
@@ -237,11 +277,7 @@
                 </Border>
 
                 <Border Grid.Row="2" Grid.Column="1" 
-                        Margin="0,2.5,0,2.5" 
-                        Padding="5"  
-                        BorderThickness="1px" 
-                        BorderBrush="Black" 
-                        Background="White" 
+                        Style="{StaticResource borderBoxStyle}"
                         Visibility="{Binding EditMode, Converter={StaticResource VisibilityConverter}}">
 
                     <StackPanel>
@@ -273,13 +309,9 @@
                 </Border>
 
                 <Border Grid.Row="2" Grid.Column="1" 
-                        Margin="0,2.5,0,2.5" 
-                        Padding="5"  
-                        BorderThickness="1px" 
-                        BorderBrush="Black" 
-                        Background="White" 
+                        Style="{StaticResource borderBoxStyle}" 
                         Visibility="{Binding EditMode, Converter={StaticResource InvertedVisibilityConverter}}">
-                    
+
                     <StackPanel>
 
                         <Label FontWeight="Bold">Day of the week</Label>
@@ -309,7 +341,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Margin="0,2.5,0,2.5" Grid.Row="3" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="NavajoWhite">
+                <Border Grid.Row="3" Grid.Column="1" Style="{StaticResource borderBoxStyle}">
                     <Grid >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
