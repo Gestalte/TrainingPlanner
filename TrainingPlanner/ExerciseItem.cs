@@ -1,8 +1,10 @@
-﻿namespace TrainingPlanner
+﻿using CommunityToolkit.Mvvm.Input;
+
+namespace TrainingPlanner
 {
     public class ExerciseItem
     {
-        public ExerciseItem(string description, RelayCommand<object> removeCommand)
+        public ExerciseItem(string description, IRelayCommand<object> removeCommand)
         {
             Description = description;
             RemoveCommand = removeCommand;
@@ -13,6 +15,6 @@
         public ExerciseItem Myself { get; set; }
         public int ExerciseId { get; set; }
         public string Description { get; set; }
-        public RelayCommand<object> RemoveCommand { get; set; }
+        public IRelayCommand<object> RemoveCommand { get; set; }
     }
 }

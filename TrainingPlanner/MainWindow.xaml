@@ -210,12 +210,12 @@
                         <Label FontWeight="Bold">Time of Day</Label>
                         <RadioButton 
                             GroupName="AMPM"
-                            IsChecked="{Binding AMPMSelection, Converter={StaticResource AMPMEnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.AM}}">
+                            IsChecked="{Binding AmpmSelection, Converter={StaticResource AMPMEnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.AM}}">
                             AM
                         </RadioButton>
                         <RadioButton 
                             GroupName="AMPM" 
-                            IsChecked="{Binding AMPMSelection, Converter={StaticResource AMPMEnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.PM}}">
+                            IsChecked="{Binding AmpmSelection, Converter={StaticResource AMPMEnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.PM}}">
                             PM
                         </RadioButton>
                     </StackPanel>

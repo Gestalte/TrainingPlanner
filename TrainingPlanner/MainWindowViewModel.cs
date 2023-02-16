@@ -1,14 +1,15 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 using TrainingPlanner.Data;
 
 namespace TrainingPlanner
 {
-    public partial class MainWindowViewModel : INotifyPropertyChanged
+    public partial class MainWindowViewModel:ObservableObject,INotifyPropertyChanged
     {
         private readonly IScheduleRepository scheduleRepository;
 
@@ -16,211 +17,65 @@ namespace TrainingPlanner
         {
             this.scheduleRepository = scheduleRepository;
 
-            CreateCommand = new RelayCommand(OnCreate);
-            EditCommand = new RelayCommand<object>(OnEdit);
-            CancelCommand = new RelayCommand(OnCancel);
-            SaveCommand = new RelayCommand(OnSave);
-            AddExerciseCommand = new RelayCommand(OnAddExercise);
-            RemoveExcerciseItemCommand = new RelayCommand<object>(OnRemoveExcerciseItem);
-
             ExerciseItems = new ObservableCollection<ExerciseItem>();
 
             EditMode = false;
             CurrentWindowView = WindowView.Weekview;
             MainTitle = "Week view";
-            AMPMSelection = TimeSlot.AM;
+            AmpmSelection = TimeSlot.AM;
 
             ResetWeekdayCheckboxes();
 
             LoadSchedules();
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        [ObservableProperty]
+        string title;
 
-        public void NotifyPropertyChanged(string propName)
-        {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
-            }
-        }
+        [ObservableProperty]
+        int numberOfRepetitions;
 
-        private string title = "";
-        public string Title
-        {
-            get => title;
-            set
-            {
-                title = value;
-                this.NotifyPropertyChanged(nameof(Title));
-            }
-        }
+        [ObservableProperty]
+        TimeSlot ampmSelection;
 
-        private int numberOfRepetitions;
-        public int NumberOfRepetitions
-        {
-            get => numberOfRepetitions;
-            set
-            {
-                numberOfRepetitions = value;
-                this.NotifyPropertyChanged(nameof(NumberOfRepetitions));
-            }
-        }
+        [ObservableProperty]
+        bool mondayChecked;
 
-        private TimeSlot ampmSelection;
-        public TimeSlot AMPMSelection
-        {
-            get => ampmSelection;
-            set
-            {
-                ampmSelection = value;
-                this.NotifyPropertyChanged(nameof(AMPMSelection));
-            }
-        }
+        [ObservableProperty]
+        bool tuesdayChecked;
 
-        private bool mondayChecked;
-        public bool MondayChecked
-        {
-            get => mondayChecked;
-            set
-            {
-                mondayChecked = value;
-                this.NotifyPropertyChanged(nameof(MondayChecked));
-            }
-        }
+        [ObservableProperty]
+        bool wednesdayChecked;
 
-        private bool tuesdayChecked;
-        public bool TuesdayChecked
-        {
-            get => tuesdayChecked;
-            set
-            {
-                tuesdayChecked = value;
-                this.NotifyPropertyChanged(nameof(TuesdayChecked));
-            }
-        }
+        [ObservableProperty]
+        bool thursdayChecked;
 
-        private bool wednesdayChecked;
-        public bool WednesdayChecked
-        {
-            get => wednesdayChecked;
-            set
-            {
-                wednesdayChecked = value;
-                this.NotifyPropertyChanged(nameof(WednesdayChecked));
-            }
-        }
+        [ObservableProperty]
+        bool fridayChecked;
 
-        private bool thursdayChecked;
-        public bool ThursdayChecked
-        {
-            get => thursdayChecked;
-            set
-            {
-                thursdayChecked = value;
-                this.NotifyPropertyChanged(nameof(ThursdayChecked));
-            }
-        }
+        [ObservableProperty]
+        bool saturdayChecked;
 
-        private bool fridayChecked;
-        public bool FridayChecked
-        {
-            get => fridayChecked;
-            set
-            {
-                fridayChecked = value;
-                this.NotifyPropertyChanged(nameof(FridayChecked));
-            }
-        }
+        [ObservableProperty]
+        bool sundayChecked;
 
-        private bool saturdayChecked;
-        public bool SaturdayChecked
-        {
-            get => saturdayChecked;
-            set
-            {
-                saturdayChecked = value;
-                this.NotifyPropertyChanged(nameof(SaturdayChecked));
-            }
-        }
+        [ObservableProperty]
+        string exerciseDescription;
 
-        private bool sundayChecked;
-        public bool SundayChecked
-        {
-            get => sundayChecked;
-            set
-            {
-                sundayChecked = value;
-                this.NotifyPropertyChanged(nameof(SundayChecked));
-            }
-        }
+        [ObservableProperty]
+        WindowView currentWindowView;
 
-        private string exerciseDescription = "";
-        public string ExerciseDescription
-        {
-            get => exerciseDescription;
-            set
-            {
-                exerciseDescription = value;
-                this.NotifyPropertyChanged(nameof(ExerciseDescription));
-            }
-        }
+        [ObservableProperty]
+        bool showCancelButton;
 
-        private WindowView currentWindowView;
-        public WindowView CurrentWindowView
-        {
-            get => currentWindowView;
-            set
-            {
-                currentWindowView = value;
-                this.NotifyPropertyChanged(nameof(CurrentWindowView));
-            }
-        }
+        [ObservableProperty]
+        bool showSaveButton;
 
-        private bool showCancelButton;
-        public bool ShowCancelButton
-        {
-            get => showCancelButton;
-            set
-            {
-                showCancelButton = value;
-                this.NotifyPropertyChanged(nameof(ShowCancelButton));
-            }
-        }
+        [ObservableProperty]
+        bool showCreateButton;
 
-        private bool showSaveButton;
-        public bool ShowSaveButton
-        {
-            get => showSaveButton;
-            set
-            {
-                showSaveButton = value;
-                this.NotifyPropertyChanged(nameof(ShowSaveButton));
-            }
-        }
-
-        private bool showCreateButton;
-        public bool ShowCreateButton
-        {
-            get => showCreateButton;
-            set
-            {
-                showCreateButton = value;
-                this.NotifyPropertyChanged(nameof(ShowCreateButton));
-            }
-        }
-
-        private bool editMode;
-        public bool EditMode
-        {
-            get => editMode;
-            set
-            {
-                editMode = value;
-                SetButtonVisibility();
-                this.NotifyPropertyChanged(nameof(EditMode));
-            }
-        }
+        [ObservableProperty]
+        bool editMode;
 
         private List<WeekItem> weekItems = new();
         public List<WeekItem> WeekItems
@@ -230,20 +85,13 @@ namespace TrainingPlanner
             {
                 weekItems = value;
                 SetButtonVisibility();
-                this.NotifyPropertyChanged(nameof(WeekItems));
+
+                base.OnPropertyChanged(nameof(weekItems));
             }
         }
 
-        private ObservableCollection<ExerciseItem> exerciseItems = new();
-        public ObservableCollection<ExerciseItem> ExerciseItems
-        {
-            get => exerciseItems;
-            set
-            {
-                exerciseItems = value;
-                this.NotifyPropertyChanged(nameof(ExerciseItems));
-            }
-        }
+        [ObservableProperty]
+        ObservableCollection<ExerciseItem> exerciseItems;
 
         private string mainTitle = "";
         public string MainTitle
@@ -253,7 +101,7 @@ namespace TrainingPlanner
             {
                 mainTitle = value;
                 SetButtonVisibility();
-                this.NotifyPropertyChanged(nameof(MainTitle));
+                base.OnPropertyChanged(nameof(MainTitle));
             }
         }
 
@@ -275,21 +123,19 @@ namespace TrainingPlanner
             }
         }
 
-        public ICommand CreateCommand { get; set; }
-
-        public void OnCreate()
+        [RelayCommand]
+        public void Create()
         {
-            MainTitle = "Create item";
             CurrentWindowView = WindowView.AddEditview;
+            MainTitle = "Create item";
             EditMode = false;
         }
 
-        public RelayCommand<object> EditCommand { get; set; }
-
-        public void OnEdit(object data) // TODO: Change this to get Database id for editing.
+        [RelayCommand]
+        public void Edit(object data) // TODO: Change this to get Database id for editing.
         {
-            MainTitle = "Edit item";
             CurrentWindowView = WindowView.AddEditview;
+            MainTitle = "Edit item";
             EditMode = true;
 
             var selectedSchedule = this.scheduleRepository.GetById((int)data);
@@ -297,7 +143,7 @@ namespace TrainingPlanner
             if (selectedSchedule == null) return;
 
             Title = selectedSchedule?.Title ?? "";
-            AMPMSelection = (TimeSlot)selectedSchedule.Timeslot;
+            AmpmSelection = (TimeSlot)selectedSchedule.Timeslot;
 
             // TODO: Set radio group
 
@@ -306,16 +152,14 @@ namespace TrainingPlanner
             exercises.ToList().ForEach(f => ExerciseItems.Add(f));
         }
 
-        public ICommand CancelCommand { get; set; }
-
-        public void OnCancel()
+        [RelayCommand]
+        public void Cancel()
         {
             ResetWeekView();
         }
 
-        public ICommand SaveCommand { get; set; }
-
-        public void OnSave()
+        [RelayCommand]
+        public void Save()
         {
             if (editMode)
             {
@@ -348,7 +192,7 @@ namespace TrainingPlanner
                     {
                         Title = Title,
                         Weekday = (short)day,
-                        Timeslot = (short)AMPMSelection,
+                        Timeslot = (short)AmpmSelection,
                         IsComplete = false,
                         Exercises = ExerciseItems.Select(s => new Exercise
                         {
@@ -381,18 +225,16 @@ namespace TrainingPlanner
             return weekdays.Where(w => w.check).ToArray();
         }
 
-        public ICommand AddExerciseCommand { get; set; }
-
-        public void OnAddExercise()
+        [RelayCommand]
+        public void AddExercise()
         {
             ExerciseItems.Add(new ExerciseItem(ExerciseDescription, RemoveExcerciseItemCommand));
 
             ExerciseDescription = "";
         }
 
-        public RelayCommand<object> RemoveExcerciseItemCommand { get; set; }
-
-        public void OnRemoveExcerciseItem(object data)
+        [RelayCommand]
+        public void RemoveExcerciseItem(object data)
         {
             ExerciseItems.Remove((ExerciseItem)data);
         }
@@ -414,8 +256,8 @@ namespace TrainingPlanner
 
             ClearAddEditScreen();
 
-            MainTitle = "Week view";
             CurrentWindowView = WindowView.Weekview;
+            MainTitle = "Week view";
             EditMode = false;
         }
 
@@ -423,7 +265,7 @@ namespace TrainingPlanner
         {
             Title = "";
             NumberOfRepetitions = 0;
-            AMPMSelection = TimeSlot.AM;
+            AmpmSelection = TimeSlot.AM;
             ResetWeekdayCheckboxes();
             ExerciseDescription = "";
             ExerciseItems = new ObservableCollection<ExerciseItem>();
