@@ -291,6 +291,19 @@ namespace TrainingPlanner
             MainTitle = "Edit item";
             CurrentWindowView = WindowView.AddEditview;
             EditMode = true;
+
+            var selectedSchedule = this.scheduleRepository.GetById((int)data);
+
+            if (selectedSchedule == null) return;
+
+            Title = selectedSchedule?.Title ?? "";
+            AMPMSelection = (TimeSlot)selectedSchedule.Timeslot;
+
+            // TODO: Set radio group
+
+            var exercises = selectedSchedule.Exercises.Select(s => new ExerciseItem(s.Description, RemoveExcerciseItemCommand));
+
+            exercises.ToList().ForEach(f => ExerciseItems.Add(f));
         }
 
         public ICommand CancelCommand { get; set; }
@@ -359,7 +372,7 @@ namespace TrainingPlanner
                     (WeekDay.Monday, MondayChecked),
                     (WeekDay.Tuesday, TuesdayChecked),
                     (WeekDay.Wednesday, WednesdayChecked),
-                    (WeekDay.Thursday, TuesdayChecked),
+                    (WeekDay.Thursday, ThursdayChecked),
                     (WeekDay.Friday, FridayChecked),
                     (WeekDay.Saturday, SaturdayChecked),
                     (WeekDay.Sunday, SundayChecked),
@@ -419,7 +432,7 @@ namespace TrainingPlanner
         public void LoadSchedules()
         {
             Func<Schedule, WeekItem> makeWeekItem = s
-                => new WeekItem(s.Title, EditCommand, s.Exercises.Select(s => s.Description).ToList());
+                => new WeekItem(s.Title, s.ScheduleId, EditCommand, s.Exercises.Select(s => s.Description).ToList());
 
             var weekItemArr = new WeekItem[14];
 
@@ -430,7 +443,6 @@ namespace TrainingPlanner
 
             this.scheduleRepository.GetAll()
                 .Where(w => w.IsComplete == false)
-                //.Take(14)
                 .DistinctBy(d => (d.Weekday, d.Timeslot))
                 .ToList()
                 .ForEach(f => AddItem(ref weekItemArr, makeWeekItem(f), (WeekDay)f.Weekday, (TimeSlot)f.Timeslot));
@@ -441,8 +453,6 @@ namespace TrainingPlanner
         public WeekItem[] AddItem(ref WeekItem[] weekItems, WeekItem newItem, WeekDay weekDay, TimeSlot timeSlot)
         {
             int index = (int)timeSlot == 1 ? (int)weekDay : (int)weekDay + 7;
-
-            newItem.Param = (weekDay, timeSlot);
 
             weekItems[index] = newItem;
 

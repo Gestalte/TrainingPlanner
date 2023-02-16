@@ -16,6 +16,14 @@ namespace TrainingPlanner.Data
             return context.Schedules.Include(e=>e.Exercises);
         }
 
+        public Schedule? GetById(int Id)
+        {
+            return context.Schedules
+                .Include(e => e.Exercises)
+                .Where(w=>w.ScheduleId == Id)
+                .FirstOrDefault();
+        }
+
         public void Add(Schedule schedule)
         {
             context.Schedules.Add(schedule);
