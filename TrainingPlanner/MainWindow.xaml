@@ -17,6 +17,7 @@
         <me:AddEditViewVisibilityConverter x:Key="AddEditViewVisibilityConverter" />
         <me:InvertedVisibilityConverter x:Key="InvertedVisibilityConverter" />
         <me:VisibilityConverter x:Key="VisibilityConverter" />
+        <me:AMPMEnumBooleanConverter x:Key="AMPMEnumBooleanConverter" />
     </Window.Resources>
 
     <Grid Background="AntiqueWhite">
@@ -132,9 +133,11 @@
 
                 <ListView.ItemTemplate>
                     <ItemContainerTemplate>
-                        <DockPanel Grid.Row="1" Grid.Column="0" Background="MediumAquamarine" Visibility="{Binding IsVisible,Converter={StaticResource VisibilityConverter}}">
+                        <DockPanel Grid.Row="1" Grid.Column="0" 
+                                   Background="MediumAquamarine" 
+                                   Visibility="{Binding IsVisible,Converter={StaticResource VisibilityConverter}}">
 
-                                <Button DockPanel.Dock="Bottom" 
+                            <Button DockPanel.Dock="Bottom" 
                                     Background="DarkOrange" 
                                     Foreground="WhiteSmoke" 
                                     FontWeight="SemiBold" 
@@ -142,11 +145,11 @@
                                     Command="{Binding EditItemCommand}"
                                     CommandParameter="{Binding Param}">Edit</Button>
 
-                                <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5" Text="{Binding Title}"/>
+                            <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5" Text="{Binding Title}"/>
 
-                                <ListBox Background="Bisque" Padding="5,0,5,0" BorderThickness="0px" ItemsSource="{Binding LineItems}"/>
+                            <ListBox Background="Bisque" Padding="5,0,5,0" BorderThickness="0px" ItemsSource="{Binding LineItems}"/>
 
-                            </DockPanel>
+                        </DockPanel>
                     </ItemContainerTemplate>
                 </ListView.ItemTemplate>
 
@@ -188,15 +191,33 @@
                     <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center">Title</TextBlock>
                     <TextBox Grid.Row="0" Grid.Column="1" Margin="10,2.5,0,2.5" MinWidth="200" Text="{Binding Title}"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" FontWeight="Bold" VerticalAlignment="Center" Visibility="{Binding EditMode,Converter={StaticResource InvertedVisibilityConverter}}">Number of Repetitions</TextBlock>
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="10,2.5,0,2.5" MinWidth="200" Visibility="{Binding EditMode,Converter={StaticResource InvertedVisibilityConverter}}" Text="{Binding NumberOfRepetitions}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" 
+                               FontWeight="Bold" 
+                               VerticalAlignment="Center" 
+                               Visibility="{Binding EditMode,Converter={StaticResource InvertedVisibilityConverter}}">
+                        Number of Repetitions
+                    </TextBlock>
+
+                    <TextBox Grid.Row="1" Grid.Column="1" 
+                             Margin="10,2.5,0,2.5" 
+                             MinWidth="200" 
+                             Visibility="{Binding EditMode,Converter={StaticResource InvertedVisibilityConverter}}" 
+                             Text="{Binding NumberOfRepetitions}"/>
                 </Grid>
-                
+
                 <Border Margin="0,2.5,0,2.5" Padding="5" Grid.Row="1" Grid.Column="1" BorderThickness="1px" BorderBrush="Black" Background="White">
                     <StackPanel >
                         <Label FontWeight="Bold">Time of Day</Label>
-                        <RadioButton GroupName="AMPM">AM</RadioButton>
-                        <RadioButton GroupName="AMPM">PM</RadioButton>
+                        <RadioButton 
+                            GroupName="AMPM"
+                            IsChecked="{Binding AMPMSelection, Converter={StaticResource AMPMEnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.AM}}">
+                            AM
+                        </RadioButton>
+                        <RadioButton 
+                            GroupName="AMPM" 
+                            IsChecked="{Binding AMPMSelection, Converter={StaticResource AMPMEnumBooleanConverter}, ConverterParameter={x:Static local:TimeSlot.PM}}">
+                            PM
+                        </RadioButton>
                     </StackPanel>
                 </Border>
 
@@ -217,14 +238,14 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <CheckBox Grid.Row="0" Grid.Column="0">Monday</CheckBox>
-                            <CheckBox Grid.Row="1" Grid.Column="0">Tuesday</CheckBox>
-                            <CheckBox Grid.Row="2" Grid.Column="0">Wednesday</CheckBox>
-                            <CheckBox Grid.Row="3" Grid.Column="0">Thursday</CheckBox>
+                            <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding MondayChecked}">Monday</CheckBox>
+                            <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding TuesdayChecked}">Tuesday</CheckBox>
+                            <CheckBox Grid.Row="2" Grid.Column="0" IsChecked="{Binding WednesdayChecked}">Wednesday</CheckBox>
+                            <CheckBox Grid.Row="3" Grid.Column="0" IsChecked="{Binding ThursdayChecked}">Thursday</CheckBox>
 
-                            <CheckBox Grid.Row="0" Grid.Column="1" Margin="5,0,0,0">Friday</CheckBox>
-                            <CheckBox Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">Saturday</CheckBox>
-                            <CheckBox Grid.Row="2" Grid.Column="1" Margin="5,0,0,0">Sunday</CheckBox>
+                            <CheckBox Grid.Row="0" Grid.Column="1" Margin="5,0,0,0" IsChecked="{Binding FridayChecked}">Friday</CheckBox>
+                            <CheckBox Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" IsChecked="{Binding SaturdayChecked}">Saturday</CheckBox>
+                            <CheckBox Grid.Row="2" Grid.Column="1" Margin="5,0,0,0" IsChecked="{Binding SundayChecked}">Sunday</CheckBox>
                         </Grid>
 
                     </StackPanel>
@@ -238,17 +259,65 @@
                         </Grid.RowDefinitions>
 
                         <DockPanel Grid.Row="0">
-                            <TextBlock DockPanel.Dock="Left" Margin="5,0,0,0" FontWeight="Bold" VerticalAlignment="Center">Description</TextBlock>
-                            <Button DockPanel.Dock="Right" Margin="10,2.5,5,2.5" Width="50px" VerticalAlignment="Center">Add</Button>
+                            <TextBlock DockPanel.Dock="Left" 
+                                       Margin="5,0,0,0" 
+                                       FontWeight="Bold" 
+                                       VerticalAlignment="Center">
+                                Description
+                            </TextBlock>
 
-                            <TextBox DockPanel.Dock="Right" Margin="10,2.5,0,2.5"/>
+                            <Button DockPanel.Dock="Right" 
+                                    Margin="10,2.5,5,2.5" 
+                                    Width="50px" 
+                                    VerticalAlignment="Center"
+                                    Background="Blue"
+                                    Foreground="AliceBlue"
+                                    FontWeight="SemiBold"
+                                    Command="{Binding AddExerciseCommand}">
+                                Add
+                            </Button>
+
+                            <TextBox DockPanel.Dock="Right" Margin="10,2.5,0,2.5" Text="{Binding ExerciseDescription}"/>
                         </DockPanel>
 
-                        <ListView  Grid.Row="1" Margin="2.5,2.5,2.5,2.5"/>
+                        <ListView  Grid.Row="1" 
+                                   Margin="2.5,2.5,2.5,2.5"
+                                   ItemsSource="{Binding ExerciseItems}">
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+
+
+                            <ListView.ItemTemplate>
+                                <ItemContainerTemplate>
+                                    <DockPanel>
+                                        <Button DockPanel.Dock="Right" 
+                                                Background="DarkRed"
+                                                Foreground="NavajoWhite"
+                                                FontWeight="SemiBold"
+                                                Command="{Binding RemoveCommand}" 
+                                                CommandParameter="{Binding Myself}">
+                                            Remove
+                                        </Button>
+
+                                        <TextBlock  Text="{Binding Description}"/>
+                                    </DockPanel>
+                                </ItemContainerTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </Grid>
                 </Border>
 
-                <Button Grid.Row="5" Margin="0,5" Grid.Column="1" Background="Blue" Foreground="Aquamarine" FontWeight="Bold" Visibility="{Binding EditMode,Converter={StaticResource VisibilityConverter}}">Complete</Button>
+                <Button Grid.Row="5" Grid.Column="1" 
+                        Margin="0,5"  
+                        Background="Blue" Foreground="Aquamarine" 
+                        FontWeight="Bold" 
+                        Visibility="{Binding EditMode, Converter={StaticResource VisibilityConverter}}">
+                    Complete
+                </Button>
 
             </Grid>
 

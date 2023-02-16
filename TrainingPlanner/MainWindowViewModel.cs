@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -19,10 +20,17 @@ namespace TrainingPlanner
             EditCommand = new RelayCommand<object>(OnEdit);
             CancelCommand = new RelayCommand(OnCancel);
             SaveCommand = new RelayCommand(OnSave);
+            AddExerciseCommand = new RelayCommand(OnAddExercise);
+            RemoveExcerciseItemCommand = new RelayCommand<object>(OnRemoveExcerciseItem);
+
+            ExerciseItems = new ObservableCollection<ExerciseItem>();
 
             EditMode = false;
             CurrentWindowView = WindowView.Weekview;
             MainTitle = "Week view";
+            AMPMSelection = TimeSlot.AM;
+
+            ResetWeekdayCheckboxes();
 
             LoadSchedules();
         }
@@ -37,7 +45,7 @@ namespace TrainingPlanner
             }
         }
 
-        private string title;
+        private string title = "";
         public string Title
         {
             get => title;
@@ -59,11 +67,104 @@ namespace TrainingPlanner
             }
         }
 
-        // AM/PM
-        // Day of the week
-        // description
-        // Add command
-        // list of descriptions
+        private TimeSlot ampmSelection;
+        public TimeSlot AMPMSelection
+        {
+            get => ampmSelection;
+            set
+            {
+                ampmSelection = value;
+                this.NotifyPropertyChanged(nameof(AMPMSelection));
+            }
+        }
+
+        private bool mondayChecked;
+        public bool MondayChecked
+        {
+            get => mondayChecked;
+            set
+            {
+                mondayChecked = value;
+                this.NotifyPropertyChanged(nameof(MondayChecked));
+            }
+        }
+
+        private bool tuesdayChecked;
+        public bool TuesdayChecked
+        {
+            get => tuesdayChecked;
+            set
+            {
+                tuesdayChecked = value;
+                this.NotifyPropertyChanged(nameof(TuesdayChecked));
+            }
+        }
+
+        private bool wednesdayChecked;
+        public bool WednesdayChecked
+        {
+            get => wednesdayChecked;
+            set
+            {
+                wednesdayChecked = value;
+                this.NotifyPropertyChanged(nameof(WednesdayChecked));
+            }
+        }
+
+        private bool thursdayChecked;
+        public bool ThursdayChecked
+        {
+            get => thursdayChecked;
+            set
+            {
+                thursdayChecked = value;
+                this.NotifyPropertyChanged(nameof(ThursdayChecked));
+            }
+        }
+
+        private bool fridayChecked;
+        public bool FridayChecked
+        {
+            get => fridayChecked;
+            set
+            {
+                fridayChecked = value;
+                this.NotifyPropertyChanged(nameof(FridayChecked));
+            }
+        }
+
+        private bool saturdayChecked;
+        public bool SaturdayChecked
+        {
+            get => saturdayChecked;
+            set
+            {
+                saturdayChecked = value;
+                this.NotifyPropertyChanged(nameof(SaturdayChecked));
+            }
+        }
+
+        private bool sundayChecked;
+        public bool SundayChecked
+        {
+            get => sundayChecked;
+            set
+            {
+                sundayChecked = value;
+                this.NotifyPropertyChanged(nameof(SundayChecked));
+            }
+        }
+
+        private string exerciseDescription = "";
+        public string ExerciseDescription
+        {
+            get => exerciseDescription;
+            set
+            {
+                exerciseDescription = value;
+                this.NotifyPropertyChanged(nameof(ExerciseDescription));
+            }
+        }
 
         private WindowView currentWindowView;
         public WindowView CurrentWindowView
@@ -133,6 +234,17 @@ namespace TrainingPlanner
             }
         }
 
+        private ObservableCollection<ExerciseItem> exerciseItems = new();
+        public ObservableCollection<ExerciseItem> ExerciseItems
+        {
+            get => exerciseItems;
+            set
+            {
+                exerciseItems = value;
+                this.NotifyPropertyChanged(nameof(ExerciseItems));
+            }
+        }
+
         private string mainTitle = "";
         public string MainTitle
         {
@@ -192,18 +304,110 @@ namespace TrainingPlanner
 
         public void OnSave()
         {
-
+            if (editMode)
+            {
+                EditSchedule();
+            }
+            else
+            {
+                CreateSchedules();
+            }
 
             ResetWeekView();
+        }
+
+        private void EditSchedule()
+        {
+            // TODO: swap out check boxes for radio group when editing.
+
+            throw new NotImplementedException();
+        }
+
+        public void CreateSchedules()
+        {
+            for (int i = 0; i < numberOfRepetitions; i++)
+            {
+                foreach (var (day, _) in GetCheckedDays())
+                {
+                    Schedule schedule = new()
+                    {
+                        Title = Title,
+                        Weekday = (short)day,
+                        Timeslot = (short)AMPMSelection,
+                        IsComplete = false,
+                        Exercises = ExerciseItems.Select(s => new Exercise
+                        {
+                            Description = s.Description
+                        }).ToList()
+                    };
+
+                    this.scheduleRepository.Add(schedule);
+                }
+            }
+        }
+
+        private (WeekDay day, bool check)[] GetCheckedDays()
+        {
+            var weekdays = new List<(WeekDay day, bool check)>
+                {
+                    (WeekDay.Monday, MondayChecked),
+                    (WeekDay.Tuesday, TuesdayChecked),
+                    (WeekDay.Wednesday, WednesdayChecked),
+                    (WeekDay.Thursday, TuesdayChecked),
+                    (WeekDay.Friday, FridayChecked),
+                    (WeekDay.Saturday, SaturdayChecked),
+                    (WeekDay.Sunday, SundayChecked),
+                };
+
+            return weekdays.Where(w => w.check).ToArray();
+        }
+
+        public ICommand AddExerciseCommand { get; set; }
+
+        public void OnAddExercise()
+        {
+            ExerciseItems.Add(new ExerciseItem(ExerciseDescription, RemoveExcerciseItemCommand));
+
+            ExerciseDescription = "";
+        }
+
+        public RelayCommand<object> RemoveExcerciseItemCommand { get; set; }
+
+        public void OnRemoveExcerciseItem(object data)
+        {
+            ExerciseItems.Remove((ExerciseItem)data);
+        }
+
+        public void ResetWeekdayCheckboxes()
+        {
+            MondayChecked = false;
+            TuesdayChecked = false;
+            WednesdayChecked = false;
+            ThursdayChecked = false;
+            FridayChecked = false;
+            SaturdayChecked = false;
+            SundayChecked = false;
         }
 
         public void ResetWeekView()
         {
             LoadSchedules();
 
+            ClearAddEditScreen();
+
             MainTitle = "Week view";
             CurrentWindowView = WindowView.Weekview;
             EditMode = false;
+        }
+
+        private void ClearAddEditScreen()
+        {
+            Title = "";
+            NumberOfRepetitions = 0;
+            AMPMSelection = TimeSlot.AM;
+            ResetWeekdayCheckboxes();
+            ExerciseDescription = "";
+            ExerciseItems = new ObservableCollection<ExerciseItem>();
         }
 
         public void LoadSchedules()
@@ -220,7 +424,7 @@ namespace TrainingPlanner
 
             this.scheduleRepository.GetAll()
                 .Where(w => w.IsComplete == false)
-                .Take(14)
+                //.Take(14)
                 .DistinctBy(d => (d.Weekday, d.Timeslot))
                 .ToList()
                 .ForEach(f => AddItem(ref weekItemArr, makeWeekItem(f), (WeekDay)f.Weekday, (TimeSlot)f.Timeslot));

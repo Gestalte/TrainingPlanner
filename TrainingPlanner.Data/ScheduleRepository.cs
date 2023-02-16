@@ -15,5 +15,11 @@ namespace TrainingPlanner.Data
         {
             return context.Schedules.Include(e=>e.Exercises);
         }
+
+        public void Add(Schedule schedule)
+        {
+            context.Schedules.Add(schedule);
+            context.SaveChanges();
+        }
     }
 }
