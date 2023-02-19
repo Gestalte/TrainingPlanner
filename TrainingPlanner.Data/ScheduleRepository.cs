@@ -81,5 +81,14 @@ namespace TrainingPlanner.Data
             context.Schedules.Remove(schedule);
             context.SaveChanges();
         }
+
+        public DateTime GetLatestDate()
+        {
+            return context.Schedules
+                .AsNoTracking()
+                .OrderBy(o=>o.Date)
+                .Select(s=>s.Date)
+                .FirstOrDefault();
+        }
     }
 }
