@@ -21,6 +21,7 @@ namespace TrainingPlanner.Data
         public Int16 Timeslot { get; set; }
         public ICollection<Exercise> Exercises { get; set; }
         public bool IsComplete { get; set; }
+        public DateTime Date { get; set; }
     }
 
     public class Exercise
