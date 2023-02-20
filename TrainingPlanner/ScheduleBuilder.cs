@@ -16,6 +16,7 @@ namespace TrainingPlanner
             this.scheduleRepository = scheduleRepository;
         }
 
+        // TODO: Load only schedules in the current week.
         public List<WeekItem> LoadSchedules()
         {
             Func<Schedule, WeekItem> makeWeekItem = s

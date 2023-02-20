@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -132,6 +134,12 @@ namespace TrainingPlanner
         }
 
         [RelayCommand]
+        public void RemoveExcerciseItem(object data)
+        {
+            ExerciseItems.Remove((ExerciseItem)data);
+        }
+
+        [RelayCommand]
         public void Edit(object data) // TODO: Change this to get Database id for editing.
         {
             CurrentWindowView = WindowView.AddEditview;
@@ -166,6 +174,7 @@ namespace TrainingPlanner
         {
             if (EditMode)
             {
+                // TODO: Figure out how to do edits now that dates are added.
                 EditSchedule();
             }
             else
@@ -205,13 +214,41 @@ namespace TrainingPlanner
             SelectedSchedule = null!;
         }
 
+        public DateTime GetNextAvailableDate(WeekDay weekDay)
+        {
+            var currentDate = GetLastDate();
+
+            // TODO: Use DayOfWeek instead of custom version.
+            DayOfWeek day = currentDate.Date.DayOfWeek;
+
+            int diff = (int)weekDay - (int)day;
+            
+            int daysToAdd = diff >= 0 
+                ? diff 
+                : 7 - Math.Abs(diff);
+
+            return currentDate.AddDays(daysToAdd);
+        }
+
+        public DateTime GetLastDate()
+        {
+            var latestDate = this.scheduleRepository.GetLatestDate();
+
+            if (latestDate < DateTime.Now)
+            {
+                latestDate = DateTime.Now;
+            }
+
+            return latestDate;
+        }
+
         public void CreateSchedules()
         {
             List<Schedule> schedules = new List<Schedule>();
 
             for (int i = 0; i < NumberOfRepetitions; i++)
             {
-                foreach (var (day, _) in GetCheckedDays())
+                foreach (var day in GetCheckedDays())
                 {
                     Schedule schedule = new()
                     {
@@ -219,6 +256,7 @@ namespace TrainingPlanner
                         Weekday = (short)day,
                         Timeslot = (short)AmpmSelection,
                         IsComplete = false,
+                        Date = GetNextAvailableDate(day),
                         Exercises = ExerciseItems.Select(s => new Exercise
                         {
                             Description = s.Description
@@ -232,20 +270,20 @@ namespace TrainingPlanner
             this.scheduleRepository.AddMultiple(schedules.ToArray());
         }
 
-        private (WeekDay day, bool check)[] GetCheckedDays()
+        private WeekDay[] GetCheckedDays()
         {
             var weekdays = new List<(WeekDay day, bool check)>
-                {
-                    (WeekDay.Monday, MondayChecked),
-                    (WeekDay.Tuesday, TuesdayChecked),
-                    (WeekDay.Wednesday, WednesdayChecked),
-                    (WeekDay.Thursday, ThursdayChecked),
-                    (WeekDay.Friday, FridayChecked),
-                    (WeekDay.Saturday, SaturdayChecked),
-                    (WeekDay.Sunday, SundayChecked),
-                };
+            {
+                (WeekDay.Monday, MondayChecked),
+                (WeekDay.Tuesday, TuesdayChecked),
+                (WeekDay.Wednesday, WednesdayChecked),
+                (WeekDay.Thursday, ThursdayChecked),
+                (WeekDay.Friday, FridayChecked),
+                (WeekDay.Saturday, SaturdayChecked),
+                (WeekDay.Sunday, SundayChecked),
+            };
 
-            return weekdays.Where(w => w.check).ToArray();
+            return weekdays.Where(w => w.check).Select(s => s.day).ToArray();
         }
 
         [RelayCommand]
@@ -254,12 +292,6 @@ namespace TrainingPlanner
             ExerciseItems.Add(new ExerciseItem(ExerciseDescription, RemoveExcerciseItemCommand));
 
             ExerciseDescription = "";
-        }
-
-        [RelayCommand]
-        public void RemoveExcerciseItem(object data)
-        {
-            ExerciseItems.Remove((ExerciseItem)data);
         }
 
         [RelayCommand]
