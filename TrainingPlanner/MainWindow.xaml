@@ -80,86 +80,6 @@
             <Calendar/>
         </StackPanel>
 
-        <!--Week view-->
-
-        <Grid x:Name="WeekGrid" Grid.Row="1" Grid.Column="1" 
-              Background="AliceBlue" 
-              Visibility="{Binding CurrentWindowView,Converter={StaticResource WeekViewVisibilityConverter}}">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30px"/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource weekDayColumnOdd}"/>
-            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource weekDayColumnEven}"/>
-            <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource weekDayColumnOdd}"/>
-            <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource weekDayColumnEven}"/>
-            <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource weekDayColumnOdd}"/>
-            <Border Grid.Row="0" Grid.Column="5" Style="{StaticResource weekDayColumnEven}"/>
-            <Border Grid.Row="0" Grid.Column="6" Style="{StaticResource weekDayColumnOdd}"/>
-
-            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource weekHeaderStyle}">Sunday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource weekHeaderStyle}">Monday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource weekHeaderStyle}">Tuesday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource weekHeaderStyle}">Wednesday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource weekHeaderStyle}">Thursday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="5" Style="{StaticResource weekHeaderStyle}">Friday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="6" Style="{StaticResource weekHeaderStyle}">Saturday</TextBlock>
-
-            <ListView Grid.Row="1" 
-                      Grid.Column="0" 
-                      Grid.ColumnSpan="7" 
-                      Grid.RowSpan="2" 
-                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                      HorizontalContentAlignment="Stretch" 
-                      VerticalContentAlignment="Stretch"
-                      ItemsSource="{Binding WeekItems}"
-                      Visibility="{Binding CurrentWindowView,Converter={StaticResource WeekViewVisibilityConverter}}"
-                      Background="Transparent">
-
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="7" Rows="2" />
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-
-                <ListView.ItemTemplate>
-                    <ItemContainerTemplate>
-                        <DockPanel Grid.Row="1" Grid.Column="0" 
-                                   Background="MediumAquamarine" 
-                                   Visibility="{Binding IsVisible,Converter={StaticResource VisibilityConverter}}">
-
-                            <Button DockPanel.Dock="Bottom" 
-                                    Background="DarkOrange" 
-                                    Foreground="WhiteSmoke" 
-                                    FontWeight="SemiBold" 
-                                    Height="40"
-                                    Command="{Binding EditItemCommand}"
-                                    CommandParameter="{Binding Param}">Edit</Button>
-
-                            <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5" Text="{Binding Title}"/>
-
-                            <ListBox Background="Bisque" Padding="5,0,5,0" BorderThickness="0px" ItemsSource="{Binding LineItems}"/>
-
-                        </DockPanel>
-                    </ItemContainerTemplate>
-                </ListView.ItemTemplate>
-
-            </ListView>
-        </Grid>
-
         <!--Edit/New-->
 
         <ScrollViewer Grid.Row="1" Grid.Column="1" 
@@ -360,5 +280,86 @@
 
         </ScrollViewer>
 
+        <!--Week view-->
+
+        <Grid x:Name="WeekGrid" Grid.Row="1" Grid.Column="1" 
+              Background="AliceBlue" 
+              Visibility="{Binding CurrentWindowView,Converter={StaticResource WeekViewVisibilityConverter}}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30px"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource weekDayColumnOdd}"/>
+            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource weekDayColumnEven}"/>
+            <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource weekDayColumnOdd}"/>
+            <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource weekDayColumnEven}"/>
+            <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource weekDayColumnOdd}"/>
+            <Border Grid.Row="0" Grid.Column="5" Style="{StaticResource weekDayColumnEven}"/>
+            <Border Grid.Row="0" Grid.Column="6" Style="{StaticResource weekDayColumnOdd}"/>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource weekHeaderStyle}">Sunday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource weekHeaderStyle}">Monday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource weekHeaderStyle}">Tuesday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource weekHeaderStyle}">Wednesday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource weekHeaderStyle}">Thursday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="5" Style="{StaticResource weekHeaderStyle}">Friday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="6" Style="{StaticResource weekHeaderStyle}">Saturday</TextBlock>
+
+            <ListView Grid.Row="1" 
+                      Grid.Column="0" 
+                      Grid.ColumnSpan="7" 
+                      Grid.RowSpan="2" 
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      HorizontalContentAlignment="Stretch" 
+                      VerticalContentAlignment="Stretch"
+                      ItemsSource="{Binding WeekItems}"
+                      Visibility="{Binding CurrentWindowView,Converter={StaticResource WeekViewVisibilityConverter}}"
+                      Background="Transparent">
+
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="7" Rows="2" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+
+                <ListView.ItemTemplate>
+                    <ItemContainerTemplate>
+                        <DockPanel Grid.Row="1" Grid.Column="0" 
+                                   Background="MediumAquamarine" 
+                                   Visibility="{Binding IsVisible,Converter={StaticResource VisibilityConverter}}">
+
+                            <Button DockPanel.Dock="Bottom" 
+                                    Background="DarkOrange" 
+                                    Foreground="WhiteSmoke" 
+                                    FontWeight="SemiBold" 
+                                    Height="40"
+                                    Command="{Binding EditItemCommand}"
+                                    CommandParameter="{Binding Param}">Edit</Button>
+
+                            <TextBlock  DockPanel.Dock="Top" FontWeight="SemiBold" Padding="5" Text="{Binding Title}"/>
+
+                            <ListBox Background="Bisque" Padding="5,0,5,0" BorderThickness="0px" ItemsSource="{Binding LineItems}"/>
+
+                        </DockPanel>
+                    </ItemContainerTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+        </Grid>
+        
     </Grid>
 </Window>
