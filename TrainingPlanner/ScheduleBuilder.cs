@@ -67,7 +67,7 @@ namespace TrainingPlanner
             this.scheduleRepository.AddMultiple(schedules.ToArray());
         }
 
-        private void EditSchedule
+        public void EditSchedule
             (string title
             , short timeslot
             , short weekday
@@ -92,7 +92,7 @@ namespace TrainingPlanner
             this.scheduleRepository.Edit(schedule);
         }
 
-        void DeleteSchedule(Schedule schedule)
+        public void DeleteSchedule(Schedule schedule)
         {
             this.scheduleRepository.Delete(schedule);
         }
