@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +18,6 @@ namespace TrainingPlanner
         {
             this.scheduleRepository = scheduleRepository;
             this.scheduleBuilder = scheduleBuilder;
-            this.scheduleBuilder.EditCommand = EditCommand;
 
             ExerciseItems = new ObservableCollection<ExerciseItem>();
             EditMode = false;
@@ -28,7 +26,8 @@ namespace TrainingPlanner
             AmpmSelection = TimeSlot.AM;
 
             SetWeekdayCheckboxesToFalse();
-            WeekItems = this.scheduleBuilder.LoadSchedules();
+
+            FillWeekItems();
         }
 
         [ObservableProperty]
@@ -88,13 +87,13 @@ namespace TrainingPlanner
         [ObservableProperty]
         private List<WeekItem> weekItems = new();
 
-        [ObservableProperty]
-        private bool itemCompleted;
-
         partial void OnWeekItemsChanged(List<WeekItem> value)
         {
             SetButtonVisibility();
         }
+
+        [ObservableProperty]
+        private bool itemCompleted;
 
         [ObservableProperty]
         ObservableCollection<ExerciseItem> exerciseItems = new();
@@ -105,24 +104,6 @@ namespace TrainingPlanner
         partial void OnMainTitleChanged(string value)
         {
             SetButtonVisibility();
-        }
-
-        private void SetButtonVisibility()
-        {
-            if (CurrentWindowView == WindowView.Weekview)
-            {
-                ShowCancelButton = false;
-                ShowSaveButton = false;
-
-                ShowCreateButton = true;
-            }
-            else
-            {
-                ShowCancelButton = true;
-                ShowSaveButton = true;
-
-                ShowCreateButton = false;
-            }
         }
 
         [RelayCommand]
@@ -140,7 +121,7 @@ namespace TrainingPlanner
         }
 
         [RelayCommand]
-        public void Edit(object data) // TODO: Change this to get Database id for editing.
+        public void Edit(object data)
         {
             CurrentWindowView = WindowView.AddEditview;
             MainTitle = "Edit item";
@@ -176,11 +157,19 @@ namespace TrainingPlanner
             {
                 // TODO: Figure out how to do edits now that dates are added.
                 // NOTE: Maybe don't allow changing the date?
-                EditSchedule();
+                this.scheduleBuilder.EditSchedule(Title, (short)AmpmSelection, (short)WeekDaySelection, ExerciseItems.ToList(), ItemCompleted);
+
+                SelectedSchedule = null!;
             }
             else
             {
-                CreateSchedules();
+                this.scheduleBuilder.CreateSchedules
+                    (NumberOfRepetitions
+                    , GetCheckedDays().ToList()
+                    , Title
+                    , (short)AmpmSelection
+                    , ExerciseItems.ToList()
+                    );
             }
 
             ResetWeekView();
@@ -189,86 +178,61 @@ namespace TrainingPlanner
         [RelayCommand]
         public void Delete()
         {
-            this.scheduleRepository.Delete(SelectedSchedule);
+            this.scheduleBuilder.DeleteSchedule(SelectedSchedule);
 
             SelectedSchedule = null!;
 
             ResetWeekView();
         }
 
-        private void EditSchedule()
+        [RelayCommand]
+        public void AddExercise()
         {
-            SelectedSchedule.Title = Title;
-            SelectedSchedule.Timeslot = (short)AmpmSelection;
-            SelectedSchedule.Weekday = (short)WeekDaySelection;
+            ExerciseItems.Add(new ExerciseItem(ExerciseDescription, RemoveExcerciseItemCommand));
 
-            SelectedSchedule.Exercises = ExerciseItems.Select(s => new Exercise
-            {
-                Description = s.Description,
-                ExerciseId = s.ExerciseId
-            }).ToList();
-
-            SelectedSchedule.IsComplete = ItemCompleted;
-
-            this.scheduleRepository.Edit(SelectedSchedule);
-
-            SelectedSchedule = null!;
+            ExerciseDescription = "";
         }
 
-        public DateTime GetNextAvailableDate(DayOfWeek weekDay)
+        [RelayCommand]
+        public void MarkComplete()
         {
-            var currentDate = GetLastDate();
-
-            // TODO: Use DayOfWeek instead of custom version.
-            DayOfWeek day = currentDate.Date.DayOfWeek;
-
-            int diff = (int)weekDay - (int)day;
-            
-            int daysToAdd = diff >= 0 
-                ? diff 
-                : 7 - Math.Abs(diff);
-
-            return currentDate.AddDays(daysToAdd);
+            ItemCompleted = !ItemCompleted;
         }
 
-        public DateTime GetLastDate()
+        private void SetButtonVisibility()
         {
-            var latestDate = this.scheduleRepository.GetLatestDate();
-
-            if (latestDate < DateTime.Now)
+            if (CurrentWindowView == WindowView.Weekview)
             {
-                latestDate = DateTime.Now;
+                ShowCancelButton = false;
+                ShowSaveButton = false;
+
+                ShowCreateButton = true;
             }
+            else
+            {
+                ShowCancelButton = true;
+                ShowSaveButton = true;
 
-            return latestDate;
+                ShowCreateButton = false;
+            }
         }
 
-        public void CreateSchedules()
+        private void FillWeekItems()
         {
-            List<Schedule> schedules = new List<Schedule>();
+            Func<Schedule, WeekItem> makeWeekItem = (s)
+                => new WeekItem(s.Title, s.ScheduleId, EditCommand, s.Exercises.Select(s => s.Description).ToList());
 
-            for (int i = 0; i < NumberOfRepetitions; i++)
-            {
-                foreach (var day in GetCheckedDays())
-                {
-                    Schedule schedule = new()
-                    {
-                        Title = Title,
-                        Weekday = (short)day,
-                        Timeslot = (short)AmpmSelection,
-                        IsComplete = false,
-                        Date = GetNextAvailableDate(day),
-                        Exercises = ExerciseItems.Select(s => new Exercise
-                        {
-                            Description = s.Description
-                        }).ToList()
-                    };
+            this.scheduleBuilder.LoadSchedules()
+                .ForEach(f => AddItem(makeWeekItem(f), (DayOfWeek)f.Weekday, (TimeSlot)f.Timeslot));
+        }
 
-                    schedules.Add(schedule);
-                }
-            }
+        private List<WeekItem> AddItem(WeekItem newItem, DayOfWeek weekDay, TimeSlot timeSlot)
+        {
+            int index = (int)timeSlot == 1 ? (int)weekDay : (int)weekDay + 7;
 
-            this.scheduleRepository.AddMultiple(schedules.ToArray());
+            WeekItems[index] = newItem;
+
+            return WeekItems;
         }
 
         private DayOfWeek[] GetCheckedDays()
@@ -287,20 +251,6 @@ namespace TrainingPlanner
             return weekdays.Where(w => w.check).Select(s => s.day).ToArray();
         }
 
-        [RelayCommand]
-        public void AddExercise()
-        {
-            ExerciseItems.Add(new ExerciseItem(ExerciseDescription, RemoveExcerciseItemCommand));
-
-            ExerciseDescription = "";
-        }
-
-        [RelayCommand]
-        public void MarkComplete()
-        {
-            ItemCompleted = !ItemCompleted;
-        }
-
         public void SetWeekdayCheckboxesToFalse()
         {
             MondayChecked = false;
@@ -314,7 +264,7 @@ namespace TrainingPlanner
 
         public void ResetWeekView()
         {
-            WeekItems = this.scheduleBuilder.LoadSchedules();
+            FillWeekItems();
 
             ClearAddEditScreen();
 
