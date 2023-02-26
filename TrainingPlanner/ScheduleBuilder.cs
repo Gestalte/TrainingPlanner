@@ -19,13 +19,6 @@ namespace TrainingPlanner
         // TODO: Load only schedules in the current week.
         public List<Schedule> LoadSchedules()
         {
-            var weekItemArr = new WeekItem[14];
-
-            for (int i = 0; i < weekItemArr.Length; i++)
-            {
-                weekItemArr[i] = new WeekItem();
-            }
-
             return this.scheduleRepository.GetAll()
                .Where(w => w.IsComplete == false)
                .DistinctBy(d => (d.Weekday, d.Timeslot))

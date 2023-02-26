@@ -9,6 +9,21 @@ using TrainingPlanner.Data;
 
 namespace TrainingPlanner
 {
+    /// <summary>
+    /// This only exists to be able to bind the DayOfWeek enum to a radio group. 
+    /// WPF fucking sucks.
+    /// </summary>
+    public enum WeekDay
+    {
+        Monday = DayOfWeek.Monday,
+        Tuesday = DayOfWeek.Tuesday,
+        Wednesday = DayOfWeek.Wednesday,
+        Thursday = DayOfWeek.Thursday,
+        Friday = DayOfWeek.Friday,
+        Saturday = DayOfWeek.Saturday,
+        Sunday = DayOfWeek.Sunday,
+    }
+
     public partial class MainWindowViewModel : ObservableObject, INotifyPropertyChanged
     {
         private readonly IScheduleRepository scheduleRepository;
@@ -40,7 +55,7 @@ namespace TrainingPlanner
         TimeSlot ampmSelection;
 
         [ObservableProperty]
-        DayOfWeek weekDaySelection;
+        WeekDay weekDaySelection;
 
         [ObservableProperty]
         bool mondayChecked;
@@ -135,7 +150,7 @@ namespace TrainingPlanner
 
             Title = selectedSchedule?.Title ?? "";
             AmpmSelection = (TimeSlot)selectedSchedule!.Timeslot;
-            WeekDaySelection = (DayOfWeek)selectedSchedule.Weekday;
+            WeekDaySelection = (WeekDay)selectedSchedule.Weekday;
             ItemCompleted = selectedSchedule.IsComplete;
 
             selectedSchedule.Exercises
@@ -222,22 +237,25 @@ namespace TrainingPlanner
             Func<Schedule, WeekItem> makeWeekItem = (s)
                 => new WeekItem(s.Title, s.ScheduleId, EditCommand, s.Exercises.Select(s => s.Description).ToList());
 
-            if (WeekItems == null)
+            var weekItemArr = new WeekItem[14];
+
+            for (int i = 0; i < weekItemArr.Length; i++)
             {
-                WeekItems = new WeekItem[14].ToList();
+                weekItemArr[i] = new WeekItem();
             }
 
+            // Modifies weekItemArr
             this.scheduleBuilder.LoadSchedules()
-                .ForEach(f => AddItem(makeWeekItem(f), (DayOfWeek)f.Weekday, (TimeSlot)f.Timeslot));
+                .ForEach(f => AddItem(ref weekItemArr, makeWeekItem(f), (DayOfWeek)f.Weekday, (TimeSlot)f.Timeslot));
+
+            WeekItems = weekItemArr.ToList();
         }
 
-        private List<WeekItem> AddItem(WeekItem newItem, DayOfWeek weekDay, TimeSlot timeSlot)
+        private void AddItem(ref WeekItem[] weekItems, WeekItem newItem, DayOfWeek weekDay, TimeSlot timeSlot)
         {
             int index = (int)timeSlot == 1 ? (int)weekDay : (int)weekDay + 7;
 
-            WeekItems[index] = newItem;
-
-            return WeekItems;
+            weekItems[index] = newItem;
         }
 
         private DayOfWeek[] GetCheckedDays()
