@@ -115,7 +115,12 @@ namespace TrainingPlanner
 
             latestNewDate = latestDateInDB < latestNewDate
                 ? latestNewDate
-                : latestDateInDB;
+                : latestDateInDB.AddDays(7);
+
+            if (NewDates.Contains( latestNewDate))
+            {
+                latestNewDate = latestNewDate.AddDays(7);
+            }
 
             DayOfWeek day = latestNewDate.Date.DayOfWeek;
 
