@@ -26,10 +26,10 @@ namespace TrainingPlanner
         }
 
         public void CreateSchedules
-            ( int numberOfOccurances
+            (int numberOfOccurances
             , List<DayOfWeek> days
             , string title
-            , short timeslot
+            , TimeSlot timeslot
             , List<ExerciseItem> exercises
             , bool isComplete = false
             )
@@ -44,9 +44,9 @@ namespace TrainingPlanner
                     {
                         Title = title,
                         Weekday = (short)day,
-                        Timeslot = timeslot,
+                        Timeslot = (short)timeslot,
                         IsComplete = isComplete,
-                        Date = GetNextAvailableDate(day),
+                        Date = GetNextAvailableDate(timeslot, day),
                         Exercises = exercises.Select(s => new Exercise
                         {
                             Description = s.Description
@@ -90,12 +90,30 @@ namespace TrainingPlanner
             this.scheduleRepository.Delete(schedule);
         }
 
-        public DateTime GetNextAvailableDate(DayOfWeek weekDay)
+        public void FlushNewDates()
         {
-            var currentDate = GetLastDate();
+            NewDates = new();
+        }
+        private List<DateTime> NewDates { get; set; } = new();
 
-            // TODO: Use DayOfWeek instead of custom version.
-            DayOfWeek day = currentDate.Date.DayOfWeek;
+        public DateTime GetNextAvailableDate(TimeSlot timeSlot, DayOfWeek weekDay)
+        {
+            // TODO: Clean this up/Find a beter way of doing it.
+
+            var latestDateInDB = this.scheduleRepository.GetLatestDate((short)timeSlot, (short)weekDay);
+
+            var latestNewDate = NewDates.LastOrDefault();
+
+            if (latestNewDate == DateTime.MinValue)
+            {
+                latestNewDate = DateTime.Now;
+            }
+
+            latestNewDate = latestDateInDB < latestNewDate
+                ? latestNewDate
+                : latestDateInDB;
+
+            DayOfWeek day = latestNewDate.Date.DayOfWeek;
 
             int diff = (int)weekDay - (int)day;
 
@@ -103,19 +121,11 @@ namespace TrainingPlanner
                 ? diff
                 : 7 - Math.Abs(diff);
 
-            return currentDate.AddDays(daysToAdd);
-        }
+            var newDateToAdd = latestNewDate.AddDays(daysToAdd);
 
-        public DateTime GetLastDate()
-        {
-            var latestDate = this.scheduleRepository.GetLatestDate();
+            NewDates.Add(newDateToAdd);
 
-            if (latestDate < DateTime.Now)
-            {
-                latestDate = DateTime.Now;
-            }
-
-            return latestDate;
+            return newDateToAdd;
         }
     }
 }

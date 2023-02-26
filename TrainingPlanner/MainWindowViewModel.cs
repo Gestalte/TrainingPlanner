@@ -170,19 +170,26 @@ namespace TrainingPlanner
         {
             if (EditMode)
             {
-                // TODO: Figure out how to do edits now that dates are added.
-                // NOTE: Maybe don't allow changing the date?
-                this.scheduleBuilder.EditSchedule(Title, (short)AmpmSelection, (short)WeekDaySelection, ExerciseItems.ToList(), ItemCompleted);
+                // TODO: Figure out how to do edits. Check for conflicts.
+                this.scheduleBuilder.EditSchedule
+                    (Title
+                    , (short)AmpmSelection
+                    , (short)WeekDaySelection
+                    , ExerciseItems.ToList()
+                    , ItemCompleted
+                    );
 
                 SelectedSchedule = null!;
             }
             else
             {
+                this.scheduleBuilder.FlushNewDates();
+
                 this.scheduleBuilder.CreateSchedules
                     (NumberOfRepetitions
                     , GetCheckedDays().ToList()
                     , Title
-                    , (short)AmpmSelection
+                    , AmpmSelection
                     , ExerciseItems.ToList()
                     );
             }

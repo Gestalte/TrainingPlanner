@@ -82,12 +82,13 @@ namespace TrainingPlanner.Data
             context.SaveChanges();
         }
 
-        public DateTime GetLatestDate()
+        public DateTime GetLatestDate(short timeslot, short weekday)
         {
             return context.Schedules
                 .AsNoTracking()
-                .OrderBy(o=>o.Date)
-                .Select(s=>s.Date)
+                .OrderBy(o => o.Date)
+                .Where(w => w.Timeslot == timeslot && w.Weekday == weekday)
+                .Select(s => s.Date)
                 .FirstOrDefault();
         }
     }

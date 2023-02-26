@@ -13,7 +13,7 @@ namespace TrainingPlanner
             (int numberOfOccurances
             , List<DayOfWeek> days
             , string title
-            , short timeslot
+            , TimeSlot timeslot
             , List<ExerciseItem> exercises
             , bool isComplete = false
             );
@@ -28,8 +28,8 @@ namespace TrainingPlanner
 
         void DeleteSchedule(Schedule schedule);
 
-        DateTime GetNextAvailableDate(DayOfWeek weekDay);
+        DateTime GetNextAvailableDate(TimeSlot timeSlot, DayOfWeek weekDay);
 
-        DateTime GetLastDate();
+        void FlushNewDates();
     }
 }

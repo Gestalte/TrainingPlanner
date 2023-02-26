@@ -8,6 +8,6 @@
         void AddMultiple(Schedule[] schedules);
         void Edit(Schedule selectedSchedule);
         void Delete(Schedule selectedSchedule);
-        DateTime GetLatestDate();
+        DateTime GetLatestDate(short timeslot, short weekday);
     }
 }
