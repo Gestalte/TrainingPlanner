@@ -62,27 +62,35 @@ namespace TrainingPlanner
 
         public void EditSchedule
             (string title
-            , short timeslot
-            , short weekday
+            , TimeSlot timeslot
+            , DayOfWeek weekday
             , List<ExerciseItem> exerciseItems
             , bool isCompleted
+            , int id
             )
         {
             Schedule schedule = new()
             {
                 Title = title,
-                Timeslot = timeslot,
-                Weekday = weekday,
+                Timeslot = (short)timeslot,
+                Weekday = (short)weekday,
                 Exercises = exerciseItems.Select(s => new Exercise
                 {
                     Description = s.Description,
                     ExerciseId = s.ExerciseId
                 }).ToList(),
                 IsComplete = isCompleted,
-                Date = DateTime.Now, // TODO: Figure out what should happen here.                
+                ScheduleId=id,
             };
 
-            this.scheduleRepository.Edit(schedule);
+            try
+            {
+                this.scheduleRepository.Edit(schedule);
+            }
+            catch (AlreadyOccupiedException ex)
+            {
+                throw ex;
+            }
         }
 
         public void DeleteSchedule(Schedule schedule)

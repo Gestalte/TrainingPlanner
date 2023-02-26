@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using TrainingPlanner.Data;
 
 namespace TrainingPlanner
@@ -170,29 +171,49 @@ namespace TrainingPlanner
         {
             if (EditMode)
             {
-                // TODO: Figure out how to do edits. Check for conflicts.
-                this.scheduleBuilder.EditSchedule
-                    (Title
-                    , (short)AmpmSelection
-                    , (short)WeekDaySelection
-                    , ExerciseItems.ToList()
-                    , ItemCompleted
-                    );
-
-                SelectedSchedule = null!;
+                EditSchedule();
             }
             else
             {
-                this.scheduleBuilder.FlushNewDates();
+                AddSchedule();
+            }
+        }
 
-                this.scheduleBuilder.CreateSchedules
-                    (NumberOfRepetitions
-                    , GetCheckedDays().ToList()
-                    , Title
+        private void EditSchedule()
+        {
+            try
+            {
+                this.scheduleBuilder.EditSchedule
+                    (Title
                     , AmpmSelection
+                    , (DayOfWeek)WeekDaySelection
                     , ExerciseItems.ToList()
+                    , ItemCompleted
+                    ,selectedSchedule.ScheduleId
                     );
             }
+            catch (AlreadyOccupiedException)
+            {
+                MessageBox.Show("The timeslot you tried to move this schedule to is already occupied");
+                return;
+            }
+
+            SelectedSchedule = null!;
+
+            ResetWeekView();
+        }
+
+        private void AddSchedule()
+        {
+            this.scheduleBuilder.FlushNewDates();
+
+            this.scheduleBuilder.CreateSchedules
+                (NumberOfRepetitions
+                , GetCheckedDays().ToList()
+                , Title
+                , AmpmSelection
+                , ExerciseItems.ToList()
+                );
 
             ResetWeekView();
         }
@@ -258,7 +279,7 @@ namespace TrainingPlanner
             WeekItems = weekItemArr.ToList();
         }
 
-        private void AddItem(ref WeekItem[] weekItems, WeekItem newItem, DayOfWeek weekDay, TimeSlot timeSlot)
+        private static void AddItem(ref WeekItem[] weekItems, WeekItem newItem, DayOfWeek weekDay, TimeSlot timeSlot)
         {
             int index = (int)timeSlot == 1 ? (int)weekDay : (int)weekDay + 7;
 

@@ -20,10 +20,11 @@ namespace TrainingPlanner
 
         void EditSchedule
             (string title
-            , short timeslot
-            , short weekday
+            , TimeSlot timeslot
+            , DayOfWeek weekday
             , List<ExerciseItem> exerciseItems
             , bool isCompleted
+            , int id
             );
 
         void DeleteSchedule(Schedule schedule);

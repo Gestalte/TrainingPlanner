@@ -41,28 +41,55 @@ namespace TrainingPlanner.Data
             context.SaveChanges();
         }
 
-        public void Edit(Schedule selectedSchedule)
+        public void Edit(Schedule modifiedSchedule)
         {
             var schedule = context.Schedules
                 .Include(e => e.Exercises)
-                .Where(w => w.ScheduleId == selectedSchedule.ScheduleId)
+                .Where(w => w.ScheduleId == modifiedSchedule.ScheduleId)
                 .FirstOrDefault();
 
             if (schedule == null) return;
 
-            schedule.Title = selectedSchedule.Title;
-            schedule.Timeslot = selectedSchedule.Timeslot;
-            schedule.Weekday = selectedSchedule.Weekday;
-            schedule.IsComplete = selectedSchedule.IsComplete;
+            bool CanSave = CheckDate(schedule, modifiedSchedule);
+
+            if (!CanSave)
+            {
+                throw new AlreadyOccupiedException();
+            }
+
+            schedule.Title = modifiedSchedule.Title;
+            schedule.Timeslot = modifiedSchedule.Timeslot;
+            schedule.Weekday = modifiedSchedule.Weekday;
+            schedule.IsComplete = modifiedSchedule.IsComplete;
 
             foreach (var item in schedule.Exercises)
             {
                 context.Exercises.Remove(item);
             }
 
-            schedule.Exercises = selectedSchedule.Exercises;
+            schedule.Exercises = modifiedSchedule.Exercises;
 
             context.SaveChanges();
+        }
+
+        private bool CheckDate(Schedule schedule, Schedule modifiedSchedule)
+        {
+            var s = schedule;
+            var m = modifiedSchedule;
+
+            if (s.Timeslot == m.Timeslot
+                && s.Weekday == m.Weekday)
+            {
+                return true;
+            }
+
+            bool IsOccupied = this.context.Schedules
+                .Where(w => w.Timeslot == m.Timeslot && w.Weekday == m.Weekday)
+                .Select(s => s.Date)
+                .OrderByDescending(s => s)
+                .FirstOrDefault() == DateTime.MinValue;
+
+            return IsOccupied;
         }
 
         public void Delete(Schedule selectedSchedule)
@@ -72,6 +99,7 @@ namespace TrainingPlanner.Data
                 .Where(w => w.ScheduleId == selectedSchedule.ScheduleId)
                 .FirstOrDefault();
 
+            if (schedule == null) return;
 
             foreach (var item in schedule.Exercises)
             {
