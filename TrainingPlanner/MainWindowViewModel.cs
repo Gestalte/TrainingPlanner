@@ -222,6 +222,11 @@ namespace TrainingPlanner
             Func<Schedule, WeekItem> makeWeekItem = (s)
                 => new WeekItem(s.Title, s.ScheduleId, EditCommand, s.Exercises.Select(s => s.Description).ToList());
 
+            if (WeekItems == null)
+            {
+                WeekItems = new WeekItem[14].ToList();
+            }
+
             this.scheduleBuilder.LoadSchedules()
                 .ForEach(f => AddItem(makeWeekItem(f), (DayOfWeek)f.Weekday, (TimeSlot)f.Timeslot));
         }
