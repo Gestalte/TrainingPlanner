@@ -38,12 +38,12 @@ namespace TrainingPlanner
                 .Where(w => w.IsComplete == false)
                 .DistinctBy(d => (d.Weekday, d.Timeslot))
                 .ToList()
-                .ForEach(f => AddItem(ref weekItemArr, makeWeekItem(f), (WeekDay)f.Weekday, (TimeSlot)f.Timeslot));
+                .ForEach(f => AddItem(ref weekItemArr, makeWeekItem(f), (DayOfWeek)f.Weekday, (TimeSlot)f.Timeslot));
 
             return weekItemArr.ToList();
         }
 
-        private WeekItem[] AddItem(ref WeekItem[] weekItems, WeekItem newItem, WeekDay weekDay, TimeSlot timeSlot)
+        private WeekItem[] AddItem(ref WeekItem[] weekItems, WeekItem newItem, DayOfWeek weekDay, TimeSlot timeSlot)
         {
             int index = (int)timeSlot == 1 ? (int)weekDay : (int)weekDay + 7;
 

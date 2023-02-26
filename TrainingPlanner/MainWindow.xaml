@@ -110,13 +110,13 @@
             <Border Grid.Row="0" Grid.Column="5" Style="{StaticResource weekDayColumnEven}"/>
             <Border Grid.Row="0" Grid.Column="6" Style="{StaticResource weekDayColumnOdd}"/>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource weekHeaderStyle}">Monday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource weekHeaderStyle}">Tuesday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource weekHeaderStyle}">Wednesday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource weekHeaderStyle}">Thursday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource weekHeaderStyle}">Friday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="5" Style="{StaticResource weekHeaderStyle}">Saturday</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="6" Style="{StaticResource weekHeaderStyle}">Sunday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource weekHeaderStyle}">Sunday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource weekHeaderStyle}">Monday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource weekHeaderStyle}">Tuesday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="3" Style="{StaticResource weekHeaderStyle}">Wednesday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="4" Style="{StaticResource weekHeaderStyle}">Thursday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="5" Style="{StaticResource weekHeaderStyle}">Friday</TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="6" Style="{StaticResource weekHeaderStyle}">Saturday</TextBlock>
 
             <ListView Grid.Row="1" 
                       Grid.Column="0" 

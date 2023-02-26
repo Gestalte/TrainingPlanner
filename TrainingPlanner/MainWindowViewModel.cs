@@ -41,7 +41,7 @@ namespace TrainingPlanner
         TimeSlot ampmSelection;
 
         [ObservableProperty]
-        WeekDay weekDaySelection;
+        DayOfWeek weekDaySelection;
 
         [ObservableProperty]
         bool mondayChecked;
@@ -154,7 +154,7 @@ namespace TrainingPlanner
 
             Title = selectedSchedule?.Title ?? "";
             AmpmSelection = (TimeSlot)selectedSchedule!.Timeslot;
-            WeekDaySelection = (WeekDay)selectedSchedule.Weekday;
+            WeekDaySelection = (DayOfWeek)selectedSchedule.Weekday;
             ItemCompleted = selectedSchedule.IsComplete;
 
             selectedSchedule.Exercises
@@ -175,6 +175,7 @@ namespace TrainingPlanner
             if (EditMode)
             {
                 // TODO: Figure out how to do edits now that dates are added.
+                // NOTE: Maybe don't allow changing the date?
                 EditSchedule();
             }
             else
@@ -214,7 +215,7 @@ namespace TrainingPlanner
             SelectedSchedule = null!;
         }
 
-        public DateTime GetNextAvailableDate(WeekDay weekDay)
+        public DateTime GetNextAvailableDate(DayOfWeek weekDay)
         {
             var currentDate = GetLastDate();
 
@@ -270,17 +271,17 @@ namespace TrainingPlanner
             this.scheduleRepository.AddMultiple(schedules.ToArray());
         }
 
-        private WeekDay[] GetCheckedDays()
+        private DayOfWeek[] GetCheckedDays()
         {
-            var weekdays = new List<(WeekDay day, bool check)>
+            var weekdays = new List<(DayOfWeek day, bool check)>
             {
-                (WeekDay.Monday, MondayChecked),
-                (WeekDay.Tuesday, TuesdayChecked),
-                (WeekDay.Wednesday, WednesdayChecked),
-                (WeekDay.Thursday, ThursdayChecked),
-                (WeekDay.Friday, FridayChecked),
-                (WeekDay.Saturday, SaturdayChecked),
-                (WeekDay.Sunday, SundayChecked),
+                (DayOfWeek.Sunday, SundayChecked),
+                (DayOfWeek.Monday, MondayChecked),
+                (DayOfWeek.Tuesday, TuesdayChecked),
+                (DayOfWeek.Wednesday, WednesdayChecked),
+                (DayOfWeek.Thursday, ThursdayChecked),
+                (DayOfWeek.Friday, FridayChecked),
+                (DayOfWeek.Saturday, SaturdayChecked),
             };
 
             return weekdays.Where(w => w.check).Select(s => s.day).ToArray();
