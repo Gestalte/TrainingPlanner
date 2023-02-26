@@ -1,7 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using TrainingPlanner.Data;
 
@@ -16,12 +14,10 @@ namespace TrainingPlanner
             this.scheduleRepository = scheduleRepository;
         }
 
-        // TODO: Load only schedules in the current week.
         public List<Schedule> LoadSchedules()
         {
-            return this.scheduleRepository.GetAll()
+            return this.scheduleRepository.GetAllForCurrentWeek(DateTime.Now)
                .Where(w => w.IsComplete == false)
-               .DistinctBy(d => (d.Weekday, d.Timeslot))
                .ToList();
         }
 

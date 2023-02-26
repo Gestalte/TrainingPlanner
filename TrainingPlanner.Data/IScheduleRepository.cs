@@ -3,6 +3,7 @@
     public interface IScheduleRepository
     {
         IEnumerable<Schedule> GetAll();
+        IEnumerable<Schedule> GetAllForCurrentWeek(DateTime now);
         Schedule? GetById(int Id);
         void Add(Schedule schedule);
         void AddMultiple(Schedule[] schedules);

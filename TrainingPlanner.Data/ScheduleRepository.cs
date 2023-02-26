@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace TrainingPlanner.Data
 {
@@ -14,6 +15,39 @@ namespace TrainingPlanner.Data
         public IEnumerable<Schedule> GetAll()
         {
             return context.Schedules.Include(e => e.Exercises).AsNoTracking();
+        }
+
+        public IEnumerable<Schedule> GetAllForCurrentWeek(DateTime now)
+        {
+            var day = now.DayOfWeek;
+
+            DateTime weekStart = now.AddDays(-((int)day));
+            DateTime weekEnd = now.AddDays(6 - (int)day);
+
+            Debug.Assert(weekStart.DayOfWeek == DayOfWeek.Sunday);
+            Debug.Assert(weekEnd.DayOfWeek == DayOfWeek.Saturday);
+
+            Func<DateTime, DateTime> scrubTime = t =>
+            {
+                t = t.AddHours(-t.Hour);
+                t = t.AddMinutes(-t.Minute);
+                t = t.AddSeconds(-t.Second);
+
+                return t;
+            };
+
+            // Clean Times so that Start is 00.00.00 and end is 23.59.59
+            weekStart = scrubTime(weekStart);
+            weekEnd = scrubTime(weekEnd);
+
+            weekEnd = weekEnd.AddHours(23);
+            weekEnd = weekEnd.AddMinutes(59);
+            weekEnd = weekEnd.AddSeconds(59);
+
+            return context.Schedules
+                .AsNoTracking()
+                .Include(e => e.Exercises)
+                .Where(w => w.Date < weekEnd && w.Date > weekStart);
         }
 
         public Schedule? GetById(int Id)

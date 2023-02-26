@@ -189,7 +189,7 @@ namespace TrainingPlanner
                     , (DayOfWeek)WeekDaySelection
                     , ExerciseItems.ToList()
                     , ItemCompleted
-                    ,selectedSchedule.ScheduleId
+                    , SelectedSchedule.ScheduleId
                     );
             }
             catch (AlreadyOccupiedException)
